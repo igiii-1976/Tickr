@@ -1,28 +1,31 @@
 <script>
-    import Subtask from "./Subtask.svelte";
-    import AddSubtask from "./AddSubtask.svelte";
-    import EnterSubtask from "./EnterSubtask.svelte";
+    import Subtask from "./task-components/Subtask.svelte";
+    import AddSubtask from "./task-components/AddSubtask.svelte";
+    import { tasks } from '$lib/input.js';
 
-    let task = 
-        { 
-        name: 'Complete Project Setup', 
-        subtasks: [
-            {content: 'Initialize repository', completed: true}, 
-            {content: 'Set up development environment', completed: false}, 
-            {content: 'Write documentation', completed: true}
-        ],
-        };
+    let isHovered = $state(false);
 
-    let completedSubtask = task.subtasks.filter(subtask => subtask.completed).length;
-    let totalSubtasks = task.subtasks.length;
+    let completedSubtask = tasks[0].subtasks.filter(subtask => subtask.completed).length;
+    let totalSubtasks = tasks[0].subtasks.length;
     let progressPercent = Math.round((completedSubtask / totalSubtasks) * 100);
+    
 </script>
 
 <div class="taskContainer">
     <div class="taskDetails">
         <div class="titleRow"> 
-            <div class="taskName">{task.name}</div>
-            <img src="trash.png" class="trashIcon" alt="Trash icon"/>
+            <div class="taskName">{tasks[0].name}</div>
+            <div 
+                class="trashIconContainer"
+                on:mouseenter={() => isHovered = true}
+                on:mouseleave={() => isHovered = false}
+            >
+                <img 
+                    src={isHovered ? "trash-red.png" : "trash.png"}
+                    class="trashIcon" 
+                    alt="Trash icon"
+                />
+            </div>
         </div>
         <div class="progressDetails">
             <div class="percentRow"> 
@@ -47,11 +50,8 @@
             <Subtask/>
             <Subtask/>
         </div>
-        <div class="addSubtask">
-            <AddSubtask/>
-        </div>
         <div>
-            <EnterSubtask/>
+            <AddSubtask/>
         </div>
     </div>
 
@@ -72,6 +72,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.75em;
+        margin-top: 3px;
     }
     .titleRow {
         display: flex;
@@ -80,11 +81,23 @@
     .taskName {
         color: #e2e8f0;
         font-size: 0.95em;
+        flex-grow: 1;
+    }
+    .trashIconContainer {
+        padding: 0.2em;
+        border-radius: 5px;
+        width: 3%;
+        height: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .trashIconContainer:hover {
+        background-color: #1C3373;
     }
     .trashIcon {
         width: 15px;
         height: 15px;
-        margin-left: auto;
     }
     .progressDetails {
         display: flex;
@@ -127,6 +140,6 @@
         flex-direction: column;
         gap: 0.4em;
         width: 100%;
-        margin-top: 0.5em;
+        margin-top: 0.2em;
     }
 </style>

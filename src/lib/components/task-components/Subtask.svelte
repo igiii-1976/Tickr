@@ -1,5 +1,6 @@
 <script>
     let checked = $state(false);
+    let isTrashHovered = $state(false);
     let content = "Subtask content goes here";
 </script>
 
@@ -8,11 +9,19 @@
         <div class="checkbox">
             <input type="checkbox" bind:checked={checked}>
         </div>
-        <div class="subtaskContent">
+        <div class="subtaskContent {checked ? 'strikethrough' : ''}">
             {content}
         </div>
-        <div class="trashIconContainer">
-            <img src="trash.png" class="trashIcon" alt="Trash icon"/>
+        <div 
+            class="trashIconContainer"
+            on:mouseenter={() => isTrashHovered = true}
+            on:mouseleave={() => isTrashHovered = false}
+        >
+            <img 
+                src={isTrashHovered ? "trash-red.png" : "trash.png"} 
+                class="trashIcon" 
+                alt="Trash icon"
+            />
         </div>
     </div>
     
@@ -26,6 +35,9 @@
         padding: 0.6em;
         background-color: #333f51;
     }
+    .subtaskContainer:hover {
+        background-color: #3A4759;
+    }
     .subtaskRow {
         display: flex;
         flex-direction: row;
@@ -37,13 +49,28 @@
     .checkbox input[type="checkbox"] {
         width: 11px;
         height: 11px;
-        background-color: #333f51;
     }
     .subtaskContent {
         color: #e2e8f0;
-        font-size: 0.8em;
+        font-size: 0.75em;
         margin-left: 10px;
         flex-grow: 1;
+    }
+    .trashIconContainer {
+        padding: 0.2em;
+        border-radius: 5px;
+        width: 3%;
+        height: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .trashIconContainer:hover {
+        background-color: #1e293b;
+    }
+    .strikethrough {
+        text-decoration: line-through;
+        color: #94a3b8;
     }
     .trashIcon {
         width: 12px;
