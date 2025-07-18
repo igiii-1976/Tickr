@@ -2,19 +2,27 @@
     import Header from '$lib/components/Header.svelte';
     import Progress from '$lib/components/Progress.svelte';
     import Task from '$lib/components/Task.svelte';
+    import AddNew from '$lib/components/AddNew.svelte';
+    import { fade, slide } from 'svelte/transition';
+
+    let showAddNew = $state(false);
 </script>
 
-<Header/>
+<div class="layout">
+    <Progress {showAddNew}/>
+    <Task/>
+</div>
 
-<Progress/>
-
-<Task/>
 
 <style>
     :global(body) {
         font-family: sans-serif;
-        /* padding: 20px; */
         background-color: #14141f;
-        color: #B2C6CF;
+    }
+    .layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
 </style>

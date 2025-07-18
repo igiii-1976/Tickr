@@ -64,8 +64,6 @@
         border-radius: 10px;
         padding: 1.1em;
         width: 40%;
-        margin: 0 auto;
-        margin-top: 15px;
         background-color: #1e293b;
     }
     .taskDetails {

@@ -1,4 +1,6 @@
 <script>
+    import AddNew from "./AddNew.svelte";
+
     let tasks = [
         { title: "Task 1", completed: true },
         { title: "Task 2", completed: false },
@@ -8,49 +10,73 @@
     let taskCount = tasks.length;
     let completedTasks = tasks.filter(task => task.completed).length;
     let progressPercent = Math.round((completedTasks / taskCount) * 100);
+
+    let addisHovered = $state(false);
+
+    let { showAddNew } = $props();
 </script>
 
-<div class="progressContainer">
-    <div class="titleRow"> 
-        <img src="checked.png" class="checkIcon" alt="Checkmark icon"/>
-        <div class="overallProgress">Overall Progress</div>
-    </div>
-    <div class="progressDetails">
-        <div class="percentRow"> 
-            <div class="progressText">
-                {completedTasks} of {taskCount} tasks completed
-            </div>
-            <div class="percentage">
-                {progressPercent}%
+<div class="overallProgress">
+    <div class="progressContainer">
+        <div class="titleRow"> 
+            <img src="checked.png" class="checkIcon" alt="Checkmark icon"/>
+            <div class="titleText">Overall Progress</div>
+            <div 
+                class="addIconContainer"
+                onmouseenter={() => addisHovered = true}
+                onmouseleave={() => addisHovered = false}
+                onclick={() => showAddNew = true}
+            >
+                <img src={addisHovered ? "square-plus-green.png" : "square-plus-white.png"} 
+                class="addIcon" 
+                alt="Add icon"/>
             </div>
         </div>
-        <div class="barRow">
-            <div class="progressBar">
-                <div
-                    class="progressFill"
-                    style="width: {progressPercent}%;"
-                ></div>
+        <div class="progressDetails">
+            <div class="percentRow"> 
+                <div class="progressText">
+                    {completedTasks} of {taskCount} tasks completed
+                </div>
+                <div class="percentage">
+                    {progressPercent}%
+                </div>
+            </div>
+            <div class="barRow">
+                <div class="progressBar">
+                    <div
+                        class="progressFill"
+                        style="width: {progressPercent}%;"
+                    ></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+{#if showAddNew}
+    <div class="addNewContainer">
+        <AddNew close={() => showAddNew = false}/>
+    </div>
+{/if}
+
 <style>
-    .progressContainer {
-        display: flex;
-        flex-direction: column;
+    .overallProgress {
         border: solid 0.3px;
         border-color: #334155;
         border-radius: 10px;
         padding: 1.1em;
         width: 40%;
-        margin: 0 auto;
         margin-top: 25px;
         background-color: #1e293b;
-        gap: 0.75em;
+    }
+    .progressContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6em;
     }
     .titleRow {
         display: flex;
+        flex-direction: row;
         align-items: center;
     }
     .checkIcon {
@@ -58,9 +84,26 @@
         height: 15px;
         margin-right: 10px;
     }
-    .overallProgress {
+    .titleText {
         color: #e2e8f0;
         font-size: 0.95em;
+        flex-grow: 1;
+    }
+    .addIconContainer {
+        padding: 0.4em;
+        border-radius: 5px;
+        width: 3%;
+        height: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .addIconContainer:hover {
+        background-color: #1C3373;
+    }
+    .addIcon {
+        width: 15px;
+        height: 15px;
     }
     .progressDetails {
         display: flex;
@@ -99,5 +142,14 @@
         /* width: 0; */
         transition: width 0.3s;
         border-radius: 6px;
+    }
+    .addNewContainer {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

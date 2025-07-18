@@ -17,5 +17,6 @@
 
     .slogan {
         font-size: 0.85rem;
+        color: #94a3b8;
     }
 </style>
