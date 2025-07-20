@@ -1,3 +1,5 @@
+export let taskList = $state([]);
+
 export class SubtaskContent {
   constructor(content, completed = false) {
     this.content = $state(content);

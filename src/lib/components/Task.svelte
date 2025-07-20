@@ -1,14 +1,21 @@
 <script>
     import Subtask from "./task-components/Subtask.svelte";
     import AddSubtask from "./task-components/AddSubtask.svelte";
-    import { SubtaskContent } from "$lib/input.svelte.js";
+    import { SubtaskContent, taskList } from "$lib/input.svelte.js";
 
+    let { task = $bindable() } = $props();
+
+    // Add a new file for functions
     function addSubtask(subtask) {
         const newSubtask = new SubtaskContent(subtask);
         task.subtasks.push(newSubtask);
     }
 
-    let { task = $bindable() } = $props();
+    function removeTask(taskToRemove) {
+        const index = taskList.indexOf(taskToRemove);
+        taskList.splice(index, 1);
+    }
+    // Add a new file for functions
 
     let isHovered = $state(false);
 
@@ -22,10 +29,12 @@
         <div class="titleRow"> 
             <div class="taskName">{task.name}</div>
             <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div 
                 class="trashIconContainer"
                 on:mouseenter={() => isHovered = true}
                 on:mouseleave={() => isHovered = false}
+                on:click={() => removeTask(task)}
             >
                 <img 
                     src={isHovered ? "trash-red.png" : "trash.png"}

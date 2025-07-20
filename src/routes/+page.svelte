@@ -1,14 +1,14 @@
 <script>
     import Progress from '$lib/components/Progress.svelte';
     import Task from '$lib/components/Task.svelte';
+    import { taskList } from '$lib/input.svelte.js';
 
     let showAddNew = $state(false);
 
-    let taskList = $state([]);
 </script>
 
 <div class="layout">
-    <Progress {showAddNew} {taskList}/>
+    <Progress {showAddNew}/>
 
     {#each taskList as task}
         <Task {task}/>

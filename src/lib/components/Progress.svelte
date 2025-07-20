@@ -1,8 +1,9 @@
 <script>
     import AddNew from "./AddNew.svelte";
-    import { TaskContent } from '$lib/input.svelte.js';
+    import { TaskContent, taskList } from '$lib/input.svelte.js';
+    
 
-    let { showAddNew, taskList = $bindable() } = $props();
+    let { showAddNew } = $props();
     let addisHovered = $state(false);
 
     let taskCount = $derived(computeTotalSubtasks());
@@ -14,6 +15,7 @@
         const task = new TaskContent(newTask);
         taskList.push(task);
         showAddNew = false;
+        console.log("taskList:", taskList);
     }
 
     function computeProgress() {
