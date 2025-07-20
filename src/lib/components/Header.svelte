@@ -1,7 +1,7 @@
 
 <div class="header">
     <img src="logo.png" alt="App Logo" class="appLogo"/>
-    <div class="slogan">Go, go, go! and track your progress with percentage-based task completion</div>
+    <!-- <div class="slogan">Go, go, go! and track your progress with percentage-based task completion</div> -->
 </div>
 
 <style>
@@ -15,8 +15,8 @@
         height: 5em;
     }
 
-    .slogan {
+    /* .slogan {
         font-size: 0.85rem;
         color: #94a3b8;
-    }
+    } */
 </style>

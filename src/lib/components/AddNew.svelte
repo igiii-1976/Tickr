@@ -1,12 +1,13 @@
 <script>
-    let { close } = $props();
+    let { add, close } = $props();
+    let newTask = $state('');
 </script>
 
 <div class="addNew">
     <div class="addNewRow">
-        <input type="text" placeholder="Enter new task..." class="inputTask">
-        <button class="addButton">Add</button>
-        <button class="cancelButton">Cancel</button>
+        <input type="text" placeholder="Enter new task..." class="inputTask" bind:value={newTask}/>
+        <button class="addButton" onclick={() => add(newTask)}>Add</button>
+        <button class="cancelButton" onclick={close}>Cancel</button>
     </div>
 </div>
 

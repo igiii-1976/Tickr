@@ -1,23 +1,39 @@
 <script>
     let showEnterSubtask = $state(false);
+    let newSubtask = $state("");
+
+    let { add, task = $bindable() } = $props();
 </script>
 
-{#if !showEnterSubtask}
-    <button class="addSubtask" onclick={() => showEnterSubtask = true}>
-        <div class="addSubtaskRow">
-            <img src="plus.png" alt="Plus icon" class="plusIcon">
-            <div class="addSubtaskText">Add Subtask</div>
+<div class="addSubtaskContainer">
+    {#if !showEnterSubtask}
+        <button class="addSubtask" onclick={() => showEnterSubtask = true}>
+            <div class="addSubtaskRow">
+                <img src="plus.png" alt="Plus icon" class="plusIcon">
+                <div class="addSubtaskText">Add Subtask</div>
+            </div>
+        </button>
+    {:else}
+        <div class="enterSubtask">
+            <input type="text" placeholder="Enter subtask..." class="inputSubtask" bind:value={newSubtask}/>
+            <button class="addButton" 
+                onclick={() => {
+                    add(newSubtask),
+                    showEnterSubtask = false,
+                    newSubtask = ""
+                }
+            }>Add</button>
+            <button class="cancelButton" onclick={() => showEnterSubtask = false}>Cancel</button>
         </div>
-    </button>
-{:else}
-    <div class="enterSubtask">
-        <input type="text" placeholder="Enter subtask..." class="inputSubtask">
-        <button class="addButton">Add</button>
-        <button class="cancelButton" onclick={() => showEnterSubtask = false}>Cancel</button>
-    </div>
-{/if}
+    {/if}
+</div>
 
 <style>
+    .addSubtaskContainer {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
     .addSubtask {
         width: 100%;
         height: 100%;

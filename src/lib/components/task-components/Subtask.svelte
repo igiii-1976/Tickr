@@ -1,21 +1,38 @@
 <script>
-    let checked = $state(false);
+    let { subtaskList = $bindable(), subtask = $bindable() } = $props();
+    
     let isTrashHovered = $state(false);
-    let content = "Subtask content goes here";
+    let completed = $derived(subtask.completed);
+
+    // Add separate files for functions
+    function toggleCompletion() {
+        subtask.completed = !subtask.completed;
+    }
+
+    function removeSubtask() {
+        const index = subtaskList.indexOf(subtask);
+        if (index !== -1) {
+            subtaskList.splice(index, 1);
+        }
+    }
+    // Add separate files for functions
 </script>
 
 <div class="subtaskContainer">
     <div class="subtaskRow">
         <div class="checkbox">
-            <input type="checkbox" bind:checked={checked}>
+            <input type="checkbox" bind:checked={completed} onchange={toggleCompletion}/>
         </div>
-        <div class="subtaskContent {checked ? 'strikethrough' : ''}">
-            {content}
+        <div class="subtaskContent {completed ? 'strikethrough' : ''}">
+            {subtask.content}
         </div>
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div 
             class="trashIconContainer"
-            on:mouseenter={() => isTrashHovered = true}
-            on:mouseleave={() => isTrashHovered = false}
+            onmouseenter={() => isTrashHovered = true}
+            onmouseleave={() => isTrashHovered = false}
+            onclick={() => removeSubtask()}
         >
             <img 
                 src={isTrashHovered ? "trash-red.png" : "trash.png"} 
@@ -24,7 +41,6 @@
             />
         </div>
     </div>
-    
 </div>
 
 <style>

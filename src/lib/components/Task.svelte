@@ -1,20 +1,27 @@
 <script>
     import Subtask from "./task-components/Subtask.svelte";
     import AddSubtask from "./task-components/AddSubtask.svelte";
-    import { tasks } from '$lib/input.js';
+    import { SubtaskContent } from "$lib/input.svelte.js";
+
+    function addSubtask(subtask) {
+        const newSubtask = new SubtaskContent(subtask);
+        task.subtasks.push(newSubtask);
+    }
+
+    let { task = $bindable() } = $props();
 
     let isHovered = $state(false);
 
-    let completedSubtask = tasks[0].subtasks.filter(subtask => subtask.completed).length;
-    let totalSubtasks = tasks[0].subtasks.length;
-    let progressPercent = Math.round((completedSubtask / totalSubtasks) * 100);
-    
+    let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
+    let totalSubtasks = $derived(task.subtasks.length);
+    let progressPercent = $derived(Math.round((completedSubtask / totalSubtasks) * 100));
 </script>
 
 <div class="taskContainer">
     <div class="taskDetails">
         <div class="titleRow"> 
-            <div class="taskName">{tasks[0].name}</div>
+            <div class="taskName">{task.name}</div>
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div 
                 class="trashIconContainer"
                 on:mouseenter={() => isHovered = true}
@@ -45,13 +52,19 @@
                 </div>
             </div>
         </div>
-        <div class="subtaskDetails">
-            <Subtask/>
-            <Subtask/>
-            <Subtask/>
-        </div>
+        {#each task.subtasks as subtask}
+            <div class="subtaskDetails">
+                <Subtask
+                    subtaskList={task.subtasks} 
+                    {subtask}
+                />
+            </div>
+        {/each}
         <div>
-            <AddSubtask/>
+            <AddSubtask
+                add={addSubtask}
+                task = {task}
+            />
         </div>
     </div>
 

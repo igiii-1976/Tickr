@@ -1,19 +1,37 @@
 <script>
     import AddNew from "./AddNew.svelte";
+    import { TaskContent } from '$lib/input.svelte.js';
 
-    let tasks = [
-        { title: "Task 1", completed: true },
-        { title: "Task 2", completed: false },
-        { title: "Task 3", completed: true }
-    ];
-
-    let taskCount = tasks.length;
-    let completedTasks = tasks.filter(task => task.completed).length;
-    let progressPercent = Math.round((completedTasks / taskCount) * 100);
-
+    let { showAddNew, taskList = $bindable() } = $props();
     let addisHovered = $state(false);
 
-    let { showAddNew } = $props();
+    let taskCount = $derived(computeTotalSubtasks());
+    let completedTasks = $derived(computeProgress());
+    let progressPercent = $derived(Math.round((completedTasks / taskCount) * 100));
+
+    // Create a new file for functions
+    function addNewTask(newTask) {
+        const task = new TaskContent(newTask);
+        taskList.push(task);
+        showAddNew = false;
+    }
+
+    function computeProgress() {
+        let total = 0;
+        for (const task of taskList) {
+            total += task.subtasks.filter(s => s.completed).length;
+        }
+        return total
+    }
+
+    function computeTotalSubtasks() {
+        let total = 0;
+        for (const task of taskList) {
+            total += task.subtasks.length;
+        }
+        return total;
+    }
+    // Create a new file for functions
 </script>
 
 <div class="overallProgress">
@@ -21,6 +39,8 @@
         <div class="titleRow"> 
             <img src="checked.png" class="checkIcon" alt="Checkmark icon"/>
             <div class="titleText">Overall Progress</div>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div 
                 class="addIconContainer"
                 onmouseenter={() => addisHovered = true}
@@ -55,7 +75,10 @@
 
 {#if showAddNew}
     <div class="addNewContainer">
-        <AddNew close={() => showAddNew = false}/>
+        <AddNew
+            add={addNewTask}
+            close={() => showAddNew = false}
+        />
     </div>
 {/if}
 
@@ -66,7 +89,7 @@
         border-radius: 10px;
         padding: 1.1em;
         width: 40%;
-        margin-top: 25px;
+        margin-top: 10px;
         background-color: #1e293b;
     }
     .progressContainer {

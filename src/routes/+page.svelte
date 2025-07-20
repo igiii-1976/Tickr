@@ -1,16 +1,18 @@
 <script>
-    import Header from '$lib/components/Header.svelte';
     import Progress from '$lib/components/Progress.svelte';
     import Task from '$lib/components/Task.svelte';
-    import AddNew from '$lib/components/AddNew.svelte';
-    import { fade, slide } from 'svelte/transition';
 
     let showAddNew = $state(false);
+
+    let taskList = $state([]);
 </script>
 
 <div class="layout">
-    <Progress {showAddNew}/>
-    <Task/>
+    <Progress {showAddNew} {taskList}/>
+
+    {#each taskList as task}
+        <Task {task}/>
+    {/each}
 </div>
 
 
