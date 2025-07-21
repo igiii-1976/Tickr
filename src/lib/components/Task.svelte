@@ -21,7 +21,9 @@
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
-    let progressPercent = $derived(Math.round((completedSubtask / totalSubtasks) * 100));
+    let progressPercent = $derived.by(() => {
+        return totalSubtasks !== 0 ? Math.round((completedSubtask / totalSubtasks) * 100) : 0}
+    );
 </script>
 
 <div class="taskContainer">

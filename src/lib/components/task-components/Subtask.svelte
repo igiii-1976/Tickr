@@ -2,6 +2,10 @@
     let { subtaskList = $bindable(), subtask = $bindable() } = $props();
     
     let isTrashHovered = $state(false);
+    let isEditHovered = $state(false);
+    let isSaveHovered = $state(false);
+    let showEdit = $state(false);
+
     let completed = $derived(subtask.completed);
 
     // Add separate files for functions
@@ -23,9 +27,47 @@
         <div class="checkbox">
             <input type="checkbox" bind:checked={completed} onchange={toggleCompletion}/>
         </div>
-        <div class="subtaskContent {completed ? 'strikethrough' : ''}">
-            {subtask.content}
-        </div>
+        {#if !showEdit}
+            <div class="subtaskContent {completed ? 'strikethrough' : ''}">
+                {subtask.content}
+            </div>
+
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div 
+                class="editIconContainer"
+                onmouseenter={() => isEditHovered = true}
+                onmouseleave={() => isEditHovered = false}
+                onclick={() => showEdit = true}
+            >
+                <img 
+                    src={isEditHovered ? "edit-yellow.png" : "edit.png"} 
+                    class="editIcon" 
+                    alt="Edit icon"
+                />
+            </div>
+        {:else}
+            <input type="text" class="editSubtask" bind:value={subtask.content}/>
+
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div 
+                class="saveIconContainer"
+                onmouseenter={() => isSaveHovered = true}
+                onmouseleave={() => isSaveHovered = false}
+                onclick={() => {
+                    subtask.content = subtask.content;
+                    showEdit = false;
+                }}
+            >
+                <img 
+                    src={isSaveHovered ? "save-green.png" : "save.png"} 
+                    class="saveIcon" 
+                    alt="Save icon"
+                />
+            </div>
+        {/if}
+
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div 
@@ -72,6 +114,54 @@
         margin-left: 10px;
         flex-grow: 1;
     }
+    .strikethrough {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+    .editSubtask {
+        flex-grow: 1;
+        padding: 0.3em;
+        border: solid 0.5px #334155;
+        border-radius: 5px;
+        background-color: #333f51;
+        color: #e2e8f0;
+        opacity: 0.9;
+        font-size: 0.7em;
+        text-indent: 10px;
+        margin-right: 10px;
+    }
+    .editIconContainer {
+        padding: 0.2em;
+        border-radius: 5px;
+        width: 3%;
+        height: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .editIconContainer:hover {
+        background-color: #1e293b;
+    }
+    .editIcon {
+        width: 12px;
+        height: 12px;
+    }
+    .saveIconContainer {
+        padding: 0.2em;
+        border-radius: 5px;
+        width: 3%;
+        height: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .saveIconContainer:hover {
+        background-color: #1e293b;
+    }
+    .saveIcon {
+        width: 12px;
+        height: 12px;
+    }
     .trashIconContainer {
         padding: 0.2em;
         border-radius: 5px;
@@ -83,10 +173,6 @@
     }
     .trashIconContainer:hover {
         background-color: #1e293b;
-    }
-    .strikethrough {
-        text-decoration: line-through;
-        color: #94a3b8;
     }
     .trashIcon {
         width: 12px;

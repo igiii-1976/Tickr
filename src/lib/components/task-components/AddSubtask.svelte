@@ -18,8 +18,8 @@
             <input type="text" placeholder="Enter subtask..." class="inputSubtask" bind:value={newSubtask}/>
             <button class="addButton" 
                 onclick={() => {
-                    add(newSubtask),
-                    showEnterSubtask = false,
+                    newSubtask !== "" ? add(newSubtask) : 0,
+                    newSubtask !== "" ? showEnterSubtask = false : 0,
                     newSubtask = ""
                 }
             }>Add</button>

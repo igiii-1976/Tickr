@@ -6,7 +6,9 @@
 <div class="addNew">
     <div class="addNewRow">
         <input type="text" placeholder="Enter new task..." class="inputTask" bind:value={newTask}/>
-        <button class="addButton" onclick={() => add(newTask)}>Add</button>
+        <button class="addButton" onclick={() => {
+            return newTask !== '' ? add(newTask) : 0}}
+        >Add</button>
         <button class="cancelButton" onclick={close}>Cancel</button>
     </div>
 </div>

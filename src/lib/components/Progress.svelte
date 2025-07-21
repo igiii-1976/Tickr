@@ -8,7 +8,9 @@
 
     let taskCount = $derived(computeTotalSubtasks());
     let completedTasks = $derived(computeProgress());
-    let progressPercent = $derived(Math.round((completedTasks / taskCount) * 100));
+    let progressPercent = $derived.by(() => {
+        return taskCount != 0 ? Math.round((completedTasks / taskCount) * 100) : 0}
+    );
 
     // Create a new file for functions
     function addNewTask(newTask) {
