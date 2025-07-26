@@ -1,7 +1,8 @@
 <script>
     import Subtask from "./task-components/Subtask.svelte";
     import AddSubtask from "./task-components/AddSubtask.svelte";
-    import { SubtaskContent, taskList } from "$lib/input.svelte.js";
+    import Options from "./task-components/Options.svelte";
+    import { SubtaskContent } from "$lib/input.svelte.js";
 
     let { task = $bindable() } = $props();
 
@@ -10,14 +11,11 @@
         const newSubtask = new SubtaskContent(subtask);
         task.subtasks.push(newSubtask);
     }
-
-    function removeTask(taskToRemove) {
-        const index = taskList.indexOf(taskToRemove);
-        taskList.splice(index, 1);
-    }
     // Add a new file for functions
 
     let isHovered = $state(false);
+    let showOption = $state(false);
+    let showEdit = $state(false);
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
@@ -28,20 +26,37 @@
 
 <div class="taskContainer">
     <div class="taskDetails">
-        <div class="titleRow"> 
-            <div class="taskName">{task.name}</div>
+        <div class="titleRow">
+            <!-- Task Name -->
+            {#if !showEdit}
+                <div class="taskName">{task.name}</div>
+            {:else}
+                <input type="text" class="editTaskName" bind:value={task.name}/>
+            {/if}
+
+            <!-- Options tab -->
+            {#if showOption}
+                <div class="optionContainer">
+                    <Options 
+                        bind:showEdit={showEdit}
+                        task={task}
+                    />
+                </div>   
+            {/if}
+
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore event_directive_deprecated -->
             <div 
-                class="trashIconContainer"
+                class="optionIconContainer"
                 on:mouseenter={() => isHovered = true}
                 on:mouseleave={() => isHovered = false}
-                on:click={() => removeTask(task)}
+                on:click={() => showOption = !showOption}
             >
                 <img 
-                    src={isHovered ? "trash-red.png" : "trash.png"}
-                    class="trashIcon" 
-                    alt="Trash icon"
+                    src={isHovered ? "option-white.png" : showOption ? "option-selected.png" : "option.png"}
+                    class="optionIcon" 
+                    alt="Option icon"
                 />
             </div>
         </div>
@@ -63,14 +78,14 @@
                 </div>
             </div>
         </div>
-        {#each task.subtasks as subtask}
-            <div class="subtaskDetails">
+        <div class="subtaskDetails">
+            {#each task.subtasks as subtask}
                 <Subtask
                     subtaskList={task.subtasks} 
-                    {subtask}
+                    subtask={subtask}
                 />
-            </div>
-        {/each}
+            {/each}
+        </div>
         <div>
             <AddSubtask
                 add={addSubtask}
@@ -86,9 +101,9 @@
         border: solid 0.3px;
         border-color: #334155;
         border-radius: 10px;
+        background-color: #1e293b;
         padding: 1.1em;
         width: 40%;
-        background-color: #1e293b;
     }
     .taskDetails {
         display: flex;
@@ -105,19 +120,34 @@
         font-size: 0.95em;
         flex-grow: 1;
     }
-    .trashIconContainer {
-        padding: 0.2em;
-        border-radius: 5px;
-        width: 3%;
-        height: 1em;
+    .editTaskName{
+        border: transparent;
+        background-color: #1e293b;
+        color: #e2e8f0;
+        opacity: 0.9;
+        font-size: 0.95em;
+        width: 100%;
+    }
+    .editTaskName:focus {
+        outline: none;
+    }
+    .optionContainer{
+        position: relative;
+        bottom: 12px;
+        right: 110px;
+    }
+
+    .optionIconContainer {
+        padding: 0.3em;
+        border-radius: 50px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    .trashIconContainer:hover {
+    .optionIconContainer:hover {
         background-color: #1C3373;
     }
-    .trashIcon {
+    .optionIcon {
         width: 15px;
         height: 15px;
     }
@@ -160,8 +190,7 @@
     .subtaskDetails {
         display: flex;
         flex-direction: column;
-        gap: 0.4em;
-        width: 100%;
+        gap: 0.5em;
         margin-top: 0.2em;
     }
 </style>

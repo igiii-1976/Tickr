@@ -1,4 +1,6 @@
 export let taskList = $state([]);
+export let archiveList = $state([]);
+export let trashList = $state([]);
 
 export class SubtaskContent {
   constructor(content, completed = false) {
@@ -8,11 +10,13 @@ export class SubtaskContent {
 }
 
 export class TaskContent {
-  constructor(name, subtasks = []) {
+  constructor(name, subtasks = [], archived = false, trashed = false) {
     this.name = $state(name);
     this.subtasks = $state(subtasks.map(
       st => new SubtaskContent(st.content, st.completed)
     ));
+    this.archived = $state(archived);
+    this.trashed = $state(trashed);
   }
 
   get completionPercentage() {

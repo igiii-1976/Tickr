@@ -1,8 +1,7 @@
 <script>
-    import AddNew from "./AddNew.svelte";
+    import AddNew from "./task-components/AddNew.svelte";
     import { TaskContent, taskList } from '$lib/input.svelte.js';
     
-
     let { showAddNew } = $props();
     let addisHovered = $state(false);
 
@@ -93,7 +92,7 @@
         border-radius: 10px;
         padding: 1.1em;
         width: 40%;
-        margin-top: 10px;
+        height: auto;
         background-color: #1e293b;
     }
     .progressContainer {
