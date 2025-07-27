@@ -91,8 +91,7 @@
         border-color: #334155;
         border-radius: 10px;
         padding: 1.1em;
-        width: 40%;
-        height: auto;
+        width: 45%;
         background-color: #1e293b;
     }
     .progressContainer {

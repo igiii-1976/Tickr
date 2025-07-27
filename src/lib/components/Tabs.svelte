@@ -8,33 +8,26 @@
     let lenTrashList = $derived(trashList.length);
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class = "tabs">
-    <div class = "tabContainer">
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class = "homeContainer" class:active={chosenTab==="Home"} onclick={() => chosenTab = "Home"}>
                 <img src="home.png" class = "homeIcon" alt="Home Icon">
                 <div class = "homeText">Home</div>
                 <div class = "homeLength">{lenTaskList}</div>
         </div>
 
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class = "archiveContainer" class:active={chosenTab==="Archive"} onclick={() => chosenTab = "Archive"}>
                 <img src="archive.png" class = "archiveIcon" alt="Archive Icon">
                 <div class = "archiveText">Archive</div>
                 <div class = "archiveLength">{lenArchiveList}</div>
         </div>
 
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class = "trashContainer" class:active={chosenTab==="Trash"} onclick={() => chosenTab = "Trash"}>
                 <img src="trash.png" class = "trashIcon" alt="Trash Icon">
                 <div class = "trashText">Trash</div>
                 <div class = "trashLength">{lenTrashList}</div>
-
         </div>
-    </div>
 </div>
 
 <style>
@@ -43,11 +36,10 @@
         border-color: #334155;
         border-radius: 15px;
         background-color: #1e293b;
-        padding: 0.25em;
-        width: 41.8%;
+        padding: 1.1em;
+        width: 45%;
+        height: 1px;
         margin-top: 10px;
-    }
-    .tabContainer {
         display: flex;
         flex-direction: row;
         justify-content: center;

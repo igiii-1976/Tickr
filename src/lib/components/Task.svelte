@@ -11,11 +11,21 @@
         const newSubtask = new SubtaskContent(subtask);
         task.subtasks.push(newSubtask);
     }
+
+    function handleKeydown(event) {
+        if (event.key === 'Enter') {
+            showEdit = false;
+            isEditHovered = false;
+        }
+    }
     // Add a new file for functions
 
     let isHovered = $state(false);
     let showOption = $state(false);
     let showEdit = $state(false);
+
+    // Part of the options component
+    let isEditHovered = $state(false);
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
@@ -24,22 +34,25 @@
     );
 </script>
 
-<div class="taskContainer">
+<div class="taskContainer" class:isTrashed={task.isTrashed}>
     <div class="taskDetails">
         <div class="titleRow">
             <!-- Task Name -->
             {#if !showEdit}
                 <div class="taskName">{task.name}</div>
             {:else}
-                <input type="text" class="editTaskName" bind:value={task.name}/>
+                <!-- svelte-ignore event_directive_deprecated -->
+                <input type="text" class="editTaskName" bind:value={task.name} on:keydown={handleKeydown}/>
             {/if}
 
             <!-- Options tab -->
             {#if showOption}
                 <div class="optionContainer">
-                    <Options 
+                    <Options
+                        bind:task={task}
                         bind:showEdit={showEdit}
-                        task={task}
+                        bind:showOption={showOption}
+                        bind:isEditHovered={isEditHovered}
                     />
                 </div>   
             {/if}
@@ -78,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div class="subtaskDetails">
+        <div class="subtaskDetails" class:isTrashed={task.isTrashed}>
             {#each task.subtasks as subtask}
                 <Subtask
                     subtaskList={task.subtasks} 
@@ -86,7 +99,7 @@
                 />
             {/each}
         </div>
-        <div>
+        <div class="addSubtask" class:isTrashed={task.isTrashed}>
             <AddSubtask
                 add={addSubtask}
                 task = {task}
@@ -103,7 +116,10 @@
         border-radius: 10px;
         background-color: #1e293b;
         padding: 1.1em;
-        width: 40%;
+        width: 45%;
+    }
+    .taskContainer.isTrashed {
+        opacity: 0.7;
     }
     .taskDetails {
         display: flex;
@@ -192,5 +208,9 @@
         flex-direction: column;
         gap: 0.5em;
         margin-top: 0.2em;
+    }
+
+    .subtaskDetails.isTrashed, .addSubtask.isTrashed {
+        pointer-events: none;
     }
 </style>

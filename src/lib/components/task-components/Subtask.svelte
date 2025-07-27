@@ -1,10 +1,8 @@
 <script>
     let { subtaskList = $bindable(), subtask = $bindable() } = $props();
     
-    let isTrashHovered = $state(false);
-    let isEditHovered = $state(false);
-    let isSaveHovered = $state(false);
-    let showEdit = $state(false);
+    let { isTrashHovered, isEditHovered, isSaveHovered } = $state(false);
+    let { showEdit } = $state(false);
 
     let completed = $derived(subtask.completed);
 
@@ -17,6 +15,14 @@
         const index = subtaskList.indexOf(subtask);
         if (index !== -1) {
             subtaskList.splice(index, 1);
+        }
+    }
+
+    function handleKeydown(event) {
+        if (event.key === 'Enter') {
+            subtask.content = subtask.content;
+            showEdit = false;
+            isEditHovered = false;
         }
     }
     // Add separate files for functions
@@ -47,7 +53,7 @@
                 />
             </div>
         {:else}
-            <input type="text" class="editSubtask" bind:value={subtask.content}/>
+            <input type="text" class="editSubtask" bind:value={subtask.content} onkeydown={handleKeydown}/>
 
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <!-- svelte-ignore a11y_click_events_have_key_events -->

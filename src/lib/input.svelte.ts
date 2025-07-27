@@ -10,13 +10,13 @@ export class SubtaskContent {
 }
 
 export class TaskContent {
-  constructor(name, subtasks = [], archived = false, trashed = false) {
+  constructor(name, subtasks = [], isArchived = false, isTrashed = false) {
     this.name = $state(name);
     this.subtasks = $state(subtasks.map(
       st => new SubtaskContent(st.content, st.completed)
     ));
-    this.archived = $state(archived);
-    this.trashed = $state(trashed);
+    this.isArchived = $state(isArchived);
+    this.isTrashed = $state(isTrashed);
   }
 
   get completionPercentage() {
