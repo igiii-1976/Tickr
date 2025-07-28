@@ -14,7 +14,6 @@
         margin-top: 1em;
         height: 5em;
     }
-
     /* .slogan {
         font-size: 0.85rem;
         color: #94a3b8;

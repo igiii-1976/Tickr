@@ -75,7 +75,7 @@
                 class = "deleteIconContainer" 
                 onmouseenter={() => isDeleteHovered = true} 
                 onmouseleave={() => isDeleteHovered = false}
-                onclick={() => deleteTask(task)}
+                onclick={() => {deleteTask(task); showOption = false;}}
             >
                 <img 
                     src={isDeleteHovered ? "delete-red.png" : "delete.png"} 

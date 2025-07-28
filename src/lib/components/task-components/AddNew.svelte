@@ -1,11 +1,19 @@
 <script>
     let { add, close } = $props();
-    let newTask = $state('');
+    let newTask = $state("");
+
+    function addTask(event) {
+        if (event.key === 'Enter' && newTask !== "") {
+            add(newTask);
+            close;
+            newTask = "";
+        }
+    }
 </script>
 
 <div class="addNew">
     <div class="addNewRow">
-        <input type="text" placeholder="Enter new task..." class="inputTask" bind:value={newTask}/>
+        <input type="text" placeholder="Enter new task..." class="inputTask" bind:value={newTask} onkeydown={addTask}/>
         <button class="addButton" onclick={() => {
             return newTask !== '' ? add(newTask) : 0}}
         >Add</button>
@@ -43,15 +51,26 @@
     .addButton {
         padding: 0.7em;
         background-color: #3b82f6;
+        border: solid 0.3px;
         border-radius: 5px;
+        border-color: #334155;
         color: #ffffff;
         font-size: 0.7em;
     }
+    .addButton:hover {
+        background-color: #3879E3;
+    }
     .cancelButton {
         padding: 0.7em;
-        background-color: #d53838;
+        /* background-color: #d53838; */
+        background-color: #243143;
+        border: solid 0.3px;
         border-radius: 5px;
+        border-color: #334155;
         color: #ffffff;
         font-size: 0.7em;
+    }
+    .cancelButton:hover {
+        background-color: #293548;
     }
 </style>

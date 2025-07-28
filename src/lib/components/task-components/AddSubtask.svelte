@@ -3,6 +3,14 @@
     let newSubtask = $state("");
 
     let { add, task = $bindable() } = $props();
+
+    function addSubstack(event) {
+        if (event.key === 'Enter' && newSubtask !== "") {
+            add(newSubtask);
+            showEnterSubtask = false;
+            newSubtask = "";
+        }
+    }
 </script>
 
 <div class="addSubtaskContainer">
@@ -15,12 +23,12 @@
         </button>
     {:else}
         <div class="enterSubtask">
-            <input type="text" placeholder="Enter subtask..." class="inputSubtask" bind:value={newSubtask}/>
+            <input type="text" placeholder="Enter subtask..." class="inputSubtask" bind:value={newSubtask} onkeydown={addSubstack}/>
             <button class="addButton" 
                 onclick={() => {
-                    newSubtask !== "" ? add(newSubtask) : 0,
-                    newSubtask !== "" ? showEnterSubtask = false : 0,
-                    newSubtask = ""
+                    newSubtask !== "" ? add(newSubtask) : 0;
+                    newSubtask !== "" ? showEnterSubtask = false : 0;
+                    newSubtask = "";
                 }
             }>Add</button>
             <button class="cancelButton" onclick={() => showEnterSubtask = false}>Cancel</button>
@@ -83,15 +91,25 @@
     .addButton {
         padding: 0.6em;
         background-color: #3b82f6;
+        border: solid 0.3px;
         border-radius: 5px;
+        border-color: #334155;
         color: #ffffff;
         font-size: 0.7em;
     }
+    .addButton:hover {
+        background-color: #3879E3;
+    }
     .cancelButton {
         padding: 0.6em;
-        background-color: #d53838;
+        background-color: #243143;
+        border: solid 0.3px;
         border-radius: 5px;
+        border-color: #334155;
         color: #ffffff;
         font-size: 0.7em;
+    }
+    .cancelButton:hover {
+        background-color: #293548;
     }
 </style>

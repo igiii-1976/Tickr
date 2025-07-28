@@ -107,9 +107,9 @@
         flex-direction: row;
         align-items: center;
     }
-    .checkbox {
+    /* .checkbox {
         cursor: pointer;
-    }
+    } */
     .checkbox input[type="checkbox"] {
         width: 11px;
         height: 11px;

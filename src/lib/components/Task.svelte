@@ -118,8 +118,11 @@
         padding: 1.1em;
         width: 45%;
     }
+    .taskContainer:hover {
+        background-color: #1B2637;
+    }
     .taskContainer.isTrashed {
-        opacity: 0.7;
+        opacity: 0.6;
     }
     .taskDetails {
         display: flex;
