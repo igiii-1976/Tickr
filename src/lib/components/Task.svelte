@@ -113,7 +113,8 @@
     .taskContainer {
         border: solid 0.3px;
         border-color: #334155;
-        border-radius: 10px;
+        /* border-radius: 10px; */
+        border-radius: 15px;
         background-color: #1e293b;
         padding: 1.1em;
         width: 45%;
@@ -125,10 +126,11 @@
         opacity: 0.6;
     }
     .taskDetails {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 0.75em;
-        margin-top: 3px;
+        margin: 10px;
     }
     .titleRow {
         display: flex;

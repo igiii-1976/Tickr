@@ -2,7 +2,7 @@
     import AddNew from "./task-components/AddNew.svelte";
     import { TaskContent, taskList } from '$lib/input.svelte.js';
     
-    let { showAddNew } = $props();
+    let { showAddNew, chosenTab } = $props();
     let addisHovered = $state(false);
 
     let taskCount = $derived(computeTotalSubtasks());
@@ -44,16 +44,19 @@
             <div class="titleText">Overall Progress</div>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div 
-                class="addIconContainer"
-                onmouseenter={() => addisHovered = true}
-                onmouseleave={() => addisHovered = false}
-                onclick={() => showAddNew = true}
-            >
-                <img src={addisHovered ? "square-plus-green.png" : "square-plus-white.png"} 
-                class="addIcon" 
-                alt="Add icon"/>
-            </div>
+             <div class="addIconTemplate">
+                <div 
+                    class="addIconContainer" class:disableAdd={chosenTab !== "Home"}
+                    onmouseenter={() => addisHovered = true}
+                    onmouseleave={() => addisHovered = false}
+                    onclick={() => showAddNew = true}
+                >
+                    <img src={addisHovered ? "square-plus-green.png" : "square-plus-white.png"} 
+                    class="addIcon" 
+                    alt="Add icon"/>
+                </div>
+             </div>
+            
         </div>
         <div class="progressDetails">
             <div class="percentRow"> 
@@ -89,7 +92,7 @@
     .overallProgress {
         border: solid 0.3px;
         border-color: #334155;
-        border-radius: 10px;
+        border-radius: 15px;
         padding: 1.1em;
         width: 45%;
         background-color: #1e293b;
@@ -97,9 +100,15 @@
     .progressContainer {
         display: flex;
         flex-direction: column;
-        gap: 0.6em;
+        gap: 1em;
+        /* margin: 10px; */
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
     .titleRow {
+        position: relative;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -110,21 +119,33 @@
         margin-right: 10px;
     }
     .titleText {
+        position: relative;
         color: #e2e8f0;
         font-size: 0.95em;
         flex-grow: 1;
+        top: 0.5px;
+    }
+    .addIconTemplate {
+        position: relative;
+        right: 25px;
+        bottom: 13.5px;
     }
     .addIconContainer {
-        padding: 0.4em;
+        position: absolute;
+        padding: 0.7em;
         border-radius: 5px;
-        width: 3%;
-        height: 1em;
+        width: 5px;
+        height: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .addIconContainer:hover {
         background-color: #1C3373;
+    }
+    .addIconContainer.disableAdd {
+        pointer-events: none;
+        opacity: 0.6;
     }
     .addIcon {
         width: 15px;
@@ -134,8 +155,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.3em;
-        margin-left: 5px;
-        margin-right: 5px;
     }
     .percentRow {
         display: flex;
