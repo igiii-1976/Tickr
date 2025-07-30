@@ -1,6 +1,7 @@
 <script>
     import AddNew from "./task-components/AddNew.svelte";
     import { TaskContent, taskList } from '$lib/input.svelte.js';
+    import { fade, fly, slide, scale } from 'svelte/transition';
     
     let { showAddNew, chosenTab } = $props();
     let addisHovered = $state(false);
@@ -34,13 +35,39 @@
         }
         return total;
     }
+
+    function getProgressColor(progressPercent) {
+        if (progressPercent <= 25) {
+            return "#F79022";
+        } else if (progressPercent <= 50) {
+            return "#F7D124";
+        } else if (progressPercent <= 75) {
+            return "#17D948";
+        } else {
+            return "#3b82f6";
+        }
+    }
+
+    function getIconColor(progressPercent, taskCount) {
+        if (taskCount == 0) {
+            return "checked.png";
+        } else if (progressPercent <= 25) {
+            return "checked-orange.png";
+        } else if (progressPercent <= 50) {
+            return "checked-yellow.png";
+        } else if (progressPercent <= 75) {
+            return "checked-green.png";
+        } else {
+            return "checked.png";
+        }
+    }
     // Create a new file for functions
 </script>
 
 <div class="overallProgress">
     <div class="progressContainer">
         <div class="titleRow"> 
-            <img src="checked.png" class="checkIcon" alt="Checkmark icon"/>
+            <img src={getIconColor(progressPercent, taskCount)} class="checkIcon" alt="Checkmark icon"/>
             <div class="titleText">Overall Progress</div>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -71,7 +98,7 @@
                 <div class="progressBar">
                     <div
                         class="progressFill"
-                        style="width: {progressPercent}%;"
+                        style="width: {progressPercent}%; background-color: {getProgressColor(progressPercent)};"
                     ></div>
                 </div>
             </div>
@@ -80,7 +107,7 @@
 </div>
 
 {#if showAddNew}
-    <div class="addNewContainer">
+    <div class="addNewContainer" transition:slide={{ duration: 900 }}>
         <AddNew
             add={addNewTask}
             close={() => showAddNew = false}
@@ -127,8 +154,8 @@
     }
     .addIconTemplate {
         position: relative;
-        right: 25px;
-        bottom: 13.5px;
+        right: 26px;
+        bottom: 12.5px;
     }
     .addIconContainer {
         position: absolute;
@@ -182,7 +209,7 @@
     }
     .progressFill {
         height: 100%;
-        background-color: #3b82f6;
+        /* background-color: #3b82f6; */
         /* width: 0; */
         transition: width 0.3s;
         border-radius: 6px;

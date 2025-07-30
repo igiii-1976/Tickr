@@ -3,6 +3,7 @@
     import AddSubtask from "./task-components/AddSubtask.svelte";
     import Options from "./task-components/Options.svelte";
     import { SubtaskContent } from "$lib/input.svelte.js";
+    import { fade, fly, slide, scale } from 'svelte/transition';
 
     let { task = $bindable() } = $props();
 
@@ -16,6 +17,18 @@
         if (event.key === 'Enter') {
             showEdit = false;
             isEditHovered = false;
+        }
+    }
+
+    function getProgressColor(progressPercent) {
+        if (progressPercent <= 25) {
+            return "#F79022";
+        } else if (progressPercent <= 50) {
+            return "#F7D124";
+        } else if (progressPercent <= 75) {
+            return "#17D948";
+        } else {
+            return "#3b82f6";
         }
     }
     // Add a new file for functions
@@ -34,7 +47,7 @@
     );
 </script>
 
-<div class="taskContainer" class:isTrashed={task.isTrashed}>
+<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
     <div class="taskDetails">
         <div class="titleRow">
             <!-- Task Name -->
@@ -86,7 +99,7 @@
                 <div class="progressBar">
                     <div
                         class="progressFill"
-                        style="width: {progressPercent}%;"
+                        style="width: {progressPercent}%; background-color: {getProgressColor(progressPercent)}"
                     ></div>
                 </div>
             </div>
@@ -118,12 +131,18 @@
         background-color: #1e293b;
         padding: 1.1em;
         width: 45%;
+        transition: opacity 500ms ease, transform 500ms ease;
     }
     .taskContainer:hover {
         background-color: #1B2637;
     }
     .taskContainer.isTrashed {
         opacity: 0.6;
+        transition: opacity 500ms ease, transform 500ms ease;
+    }
+    .taskContainer.isArchived {
+        opacity: 0.8;
+        transition: opacity 500ms ease, transform 500ms ease;
     }
     .taskDetails {
         position: relative;

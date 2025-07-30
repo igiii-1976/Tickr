@@ -9,15 +9,21 @@
         if (task.isArchived) {
             const index = archiveList.indexOf(task);
             if (index !== -1) {
-                archiveList.splice(index, 1);
+                task.isTrashed = true;
                 trashList.push(task);
+                setTimeout(() => {
+                    archiveList.splice(index, 1);
+                }, 500);
             }
         }
         else {
             const index = taskList.indexOf(task);
             if (index !== -1) {
-                taskList.splice(index, 1);
+                task.isTrashed = true;
                 trashList.push(task);
+                setTimeout(() => {
+                    taskList.splice(index, 1);
+                }, 500);
             }
         }        
     }
@@ -26,32 +32,42 @@
         if (task.isTrashed) {
             const index = trashList.indexOf(task);
             if (index !== -1) {
-                trashList.splice(index, 1);
+                task.isArchived = true;
                 archiveList.push(task);
+                setTimeout(() => {
+                    trashList.splice(index, 1);
+                }, 500);
             }
         }
         else {
             const index = taskList.indexOf(task);
             if (index !== -1) {
-                taskList.splice(index, 1);
+                task.isArchived = true;
                 archiveList.push(task);
+                setTimeout(() => {
+                    taskList.splice(index, 1);
+                }, 500);
+            }
             }
         }
-    }
-
+    
     function restoreTask(task) {
         if (task.isArchived) {
             const index = archiveList.indexOf(task);
                 if (index !== -1) {
-                    archiveList.splice(index, 1);
                     taskList.push(task);
+                    setTimeout(() => {
+                        archiveList.splice(index, 1);
+                    }, 500);
                 }
         }
         else if (task.isTrashed) {
             const index = trashList.indexOf(task);
                 if (index !== -1) {
-                    trashList.splice(index, 1);
                     taskList.push(task);
+                    setTimeout(() => {
+                        trashList.splice(index, 1);
+                    }, 500);
                 }
         }
     }
@@ -111,7 +127,7 @@
                 onclick={() => { 
                     archiveTask(task);
                     showOption = false;
-                    task.isArchived = true;
+                    // task.isArchived = true;
                     task.isTrashed = false;
                 }}
             >
@@ -148,7 +164,6 @@
                 onclick={() => {
                     trashTask(task);
                     showOption = false;
-                    task.isTrashed = true;
                     task.isArchived = false;
                 }}
             >
@@ -194,6 +209,7 @@
         justify-content: center;
         align-items: center;
         gap: 0.7em;
+        transition: width 2s, height 4s;
     }
     .editIconContainer, .archiveIconContainer, .trashIconContainer, .saveIconContainer, .restoreIconContainer, .deleteIconContainer {
         padding: 0.3em;

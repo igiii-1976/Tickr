@@ -63,6 +63,8 @@
         padding: 0.2em;
         width: 33%;
         opacity: 0.5;
+        transition: all 300ms ease;
+	    transform: scale(1);
     }
     .homeContainer.active, .archiveContainer.active, .trashContainer.active{
         border: solid 0.3px;
@@ -71,6 +73,7 @@
         border-radius: 25px;
         background-color: #243143;
         opacity: 1;
+        transform: scale(1.05);
     }
     .homeIcon, .archiveIcon, .trashIcon{
         position: relative;
