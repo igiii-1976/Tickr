@@ -1,7 +1,8 @@
 <script>
     import AddNew from "./task-components/AddNew.svelte";
     import { TaskContent, taskList } from '$lib/input.svelte.js';
-    import { fade, fly, slide, scale } from 'svelte/transition';
+    import { slide } from 'svelte/transition';
+    import { getProgressColor, getIconColor, computeProgress, computeTotalSubtasks } from "$lib/helper.js";
     
     let { showAddNew, chosenTab } = $props();
     let addisHovered = $state(false);
@@ -12,65 +13,21 @@
         return taskCount != 0 ? Math.round((completedTasks / taskCount) * 100) : 0}
     );
 
-    // Create a new file for functions
     function addNewTask(newTask) {
         const task = new TaskContent(newTask);
         taskList.push(task);
         showAddNew = false;
-        console.log("taskList:", taskList);
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
-
-    function computeProgress() {
-        let total = 0;
-        for (const task of taskList) {
-            total += task.subtasks.filter(s => s.completed).length;
-        }
-        return total
-    }
-
-    function computeTotalSubtasks() {
-        let total = 0;
-        for (const task of taskList) {
-            total += task.subtasks.length;
-        }
-        return total;
-    }
-
-    function getProgressColor(progressPercent) {
-        if (progressPercent <= 25) {
-            return "#F79022";
-        } else if (progressPercent <= 50) {
-            return "#F7D124";
-        } else if (progressPercent <= 75) {
-            return "#17D948";
-        } else {
-            return "#3b82f6";
-        }
-    }
-
-    function getIconColor(progressPercent, taskCount) {
-        if (taskCount == 0) {
-            return "checked.png";
-        } else if (progressPercent <= 25) {
-            return "checked-orange.png";
-        } else if (progressPercent <= 50) {
-            return "checked-yellow.png";
-        } else if (progressPercent <= 75) {
-            return "checked-green.png";
-        } else {
-            return "checked.png";
-        }
-    }
-    // Create a new file for functions
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="overallProgress">
     <div class="progressContainer">
         <div class="titleRow"> 
             <img src={getIconColor(progressPercent, taskCount)} class="checkIcon" alt="Checkmark icon"/>
             <div class="titleText">Overall Progress</div>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
              <div class="addIconTemplate">
                 <div 
                     class="addIconContainer" class:disableAdd={chosenTab !== "Home"}
@@ -83,7 +40,6 @@
                     alt="Add icon"/>
                 </div>
              </div>
-            
         </div>
         <div class="progressDetails">
             <div class="percentRow"> 
@@ -121,14 +77,13 @@
         border-color: #334155;
         border-radius: 15px;
         padding: 1.1em;
-        width: 45%;
+        width: 680px;
         background-color: #1e293b;
     }
     .progressContainer {
         display: flex;
         flex-direction: column;
         gap: 1em;
-        /* margin: 10px; */
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 5px;
@@ -209,8 +164,6 @@
     }
     .progressFill {
         height: 100%;
-        /* background-color: #3b82f6; */
-        /* width: 0; */
         transition: width 0.3s;
         border-radius: 6px;
     }

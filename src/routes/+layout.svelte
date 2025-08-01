@@ -36,9 +36,6 @@
         animation-name: homeNotEmpty;
         animation-duration: 1s;
     }
-
-    
-
 </style>
 
 

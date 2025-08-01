@@ -1,21 +1,15 @@
 <script>
-    let { subtaskList = $bindable(), subtask = $bindable() } = $props();
-    
-    let { isTrashHovered, isEditHovered, isSaveHovered } = $state(false);
-    let { showEdit } = $state(false);
+    import { taskList } from "$lib/input.svelte.js";
+    import { removeSubtask } from "$lib/helper.js";
+
+    let { subtaskList = $bindable(), subtask = $bindable() } = $props();    
+    let { isTrashHovered, isEditHovered, isSaveHovered, showEdit } = $state(false);
 
     let completed = $derived(subtask.completed);
 
-    // Add separate files for functions
     function toggleCompletion() {
         subtask.completed = !subtask.completed;
-    }
-
-    function removeSubtask() {
-        const index = subtaskList.indexOf(subtask);
-        if (index !== -1) {
-            subtaskList.splice(index, 1);
-        }
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
 
     function handleKeydown(event) {
@@ -24,22 +18,19 @@
             showEdit = false;
             isEditHovered = false;
         }
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
-    // Add separate files for functions
 </script>
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div class="subtaskContainer">
     <div class="subtaskRow">
         <div class="checkbox">
             <input type="checkbox" bind:checked={completed} onchange={toggleCompletion}/>
         </div>
         {#if !showEdit}
-            <div class="subtaskContent {completed ? 'strikethrough' : ''}">
-                {subtask.content}
-            </div>
-
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div class="subtaskContent {completed ? 'strikethrough' : ''}">{subtask.content}</div>
             <div 
                 class="editIconContainer"
                 onmouseenter={() => isEditHovered = true}
@@ -54,9 +45,6 @@
             </div>
         {:else}
             <input type="text" class="editSubtask" bind:value={subtask.content} onkeydown={handleKeydown}/>
-
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div 
                 class="saveIconContainer"
                 onmouseenter={() => isSaveHovered = true}
@@ -64,6 +52,7 @@
                 onclick={() => {
                     subtask.content = subtask.content;
                     showEdit = false;
+                    localStorage.setItem("taskList", JSON.stringify(taskList));
                 }}
             >
                 <img 
@@ -73,14 +62,11 @@
                 />
             </div>
         {/if}
-
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div 
             class="trashIconContainer"
             onmouseenter={() => isTrashHovered = true}
             onmouseleave={() => isTrashHovered = false}
-            onclick={() => removeSubtask()}
+            onclick={() => removeSubtask(subtask, subtaskList)}
         >
             <img 
                 src={isTrashHovered ? "trash-red.png" : "trash.png"} 
@@ -107,9 +93,6 @@
         flex-direction: row;
         align-items: center;
     }
-    /* .checkbox {
-        cursor: pointer;
-    } */
     .checkbox input[type="checkbox"] {
         width: 11px;
         height: 11px;

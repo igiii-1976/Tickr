@@ -24,7 +24,7 @@
         border-radius: 10px;
         background-color: #1e293b;
         padding: 1.29em;
-        width: 45%;
+        width: 680px;
         height: 30px;
         display: flex;
         justify-content: center;

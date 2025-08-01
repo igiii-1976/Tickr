@@ -34,18 +34,10 @@
     .tabs {
         border: solid 0.3px;
         border-color: #334155;
-        /* border-radius: 15px; */
         border-radius: 25px;
-        /* border-top-left-radius: 15px;
-        border-top-right-radius: 15px; */
         background-color: #1e293b;
         padding: 1.1em;
-        /* padding-top: 1.1em;
-        padding-bottom: 1.1em;
-        padding-left: 0.35em;
-        padding-right: 0.35em; */
-        /* width: 46.6%; */
-        width: 45%;
+        width: 680px;
         height: 1px;
         margin-top: 10px;
         display: flex;
@@ -69,7 +61,6 @@
     .homeContainer.active, .archiveContainer.active, .trashContainer.active{
         border: solid 0.3px;
         border-color: #334155;
-        /* border-radius: 10px; */
         border-radius: 25px;
         background-color: #243143;
         opacity: 1;

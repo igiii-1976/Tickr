@@ -27,7 +27,7 @@
         border-color: #334155;
         border-radius: 10px;
         padding: 1.1em;
-        width: 45%;
+        width: 680px;
         background-color: #1e293b;
         display: block;
     }
@@ -62,7 +62,6 @@
     }
     .cancelButton {
         padding: 0.7em;
-        /* background-color: #d53838; */
         background-color: #243143;
         border: solid 0.3px;
         border-radius: 5px;

@@ -3,14 +3,18 @@
     import AddSubtask from "./task-components/AddSubtask.svelte";
     import Options from "./task-components/Options.svelte";
     import { SubtaskContent } from "$lib/input.svelte.js";
-    import { fade, fly, slide, scale } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
+    import { taskList } from "$lib/input.svelte.js";
+    import { getProgressColor, isAtBottom } from "$lib/helper.js";
 
     let { task = $bindable() } = $props();
+    let { isHovered, showOption, showEdit, isEditHovered } = $state(false);
 
-    // Add a new file for functions
+    // Functions for Task component
     function addSubtask(subtask) {
         const newSubtask = new SubtaskContent(subtask);
         task.subtasks.push(newSubtask);
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
 
     function handleKeydown(event) {
@@ -18,27 +22,9 @@
             showEdit = false;
             isEditHovered = false;
         }
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
-
-    function getProgressColor(progressPercent) {
-        if (progressPercent <= 25) {
-            return "#F79022";
-        } else if (progressPercent <= 50) {
-            return "#F7D124";
-        } else if (progressPercent <= 75) {
-            return "#17D948";
-        } else {
-            return "#3b82f6";
-        }
-    }
-    // Add a new file for functions
-
-    let isHovered = $state(false);
-    let showOption = $state(false);
-    let showEdit = $state(false);
-
-    // Part of the options component
-    let isEditHovered = $state(false);
+    // Functions for Task component
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
@@ -47,20 +33,22 @@
     );
 </script>
 
-<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore event_directive_deprecated -->
+<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isAtBottom={isAtBottom(task, taskList)}>
     <div class="taskDetails">
         <div class="titleRow">
             <!-- Task Name -->
             {#if !showEdit}
                 <div class="taskName">{task.name}</div>
             {:else}
-                <!-- svelte-ignore event_directive_deprecated -->
                 <input type="text" class="editTaskName" bind:value={task.name} on:keydown={handleKeydown}/>
             {/if}
 
             <!-- Options tab -->
             {#if showOption}
-                <div class="optionContainer">
+                <div class="optionContainer" transition:fly={{ duration: 250 }}>
                     <Options
                         bind:task={task}
                         bind:showEdit={showEdit}
@@ -70,9 +58,6 @@
                 </div>   
             {/if}
 
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore event_directive_deprecated -->
             <div 
                 class="optionIconContainer"
                 on:mouseenter={() => isHovered = true}
@@ -104,7 +89,7 @@
                 </div>
             </div>
         </div>
-        <div class="subtaskDetails" class:isTrashed={task.isTrashed}>
+        <div class="subtaskDetails" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
             {#each task.subtasks as subtask}
                 <Subtask
                     subtaskList={task.subtasks} 
@@ -112,25 +97,23 @@
                 />
             {/each}
         </div>
-        <div class="addSubtask" class:isTrashed={task.isTrashed}>
+        <div class="addSubtask" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
             <AddSubtask
                 add={addSubtask}
                 task = {task}
             />
         </div>
     </div>
-
 </div>
 
 <style>
     .taskContainer {
         border: solid 0.3px;
         border-color: #334155;
-        /* border-radius: 10px; */
         border-radius: 15px;
         background-color: #1e293b;
         padding: 1.1em;
-        width: 45%;
+        width: 680px;
         transition: opacity 500ms ease, transform 500ms ease;
     }
     .taskContainer:hover {
@@ -143,6 +126,9 @@
     .taskContainer.isArchived {
         opacity: 0.8;
         transition: opacity 500ms ease, transform 500ms ease;
+    }
+    .taskContainer.isAtBottom {
+        margin-bottom: 20px;
     }
     .taskDetails {
         position: relative;
@@ -176,7 +162,6 @@
         bottom: 12px;
         right: 110px;
     }
-
     .optionIconContainer {
         padding: 0.3em;
         border-radius: 50px;
@@ -223,7 +208,6 @@
     .progressFill {
         height: 100%;
         background-color: #3b82f6;
-        /* width: 0; */
         transition: width 0.3s;
         border-radius: 6px;
     }
@@ -233,8 +217,7 @@
         gap: 0.5em;
         margin-top: 0.2em;
     }
-
-    .subtaskDetails.isTrashed, .addSubtask.isTrashed {
+    .subtaskDetails.isTrashed, .subtaskDetails.isArchived, .addSubtask.isTrashed, .addSubtask.isArchived  {
         pointer-events: none;
     }
 </style>

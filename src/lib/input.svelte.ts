@@ -3,25 +3,35 @@ export let archiveList = $state([]);
 export let trashList = $state([]);
 
 export class SubtaskContent {
-  constructor(content, completed = false) {
-    this.content = $state(content);
-    this.completed = $state(completed);
-  }
+	constructor(content, completed = false) {
+		this.content = $state(content);
+		this.completed = $state(completed);
+	}
+
+	toJSON() {
+		return {
+			content: this.content,
+			completed: this.completed
+		};
+	}
 }
 
 export class TaskContent {
-  constructor(name, subtasks = [], isArchived = false, isTrashed = false) {
-    this.name = $state(name);
-    this.subtasks = $state(subtasks.map(
-      st => new SubtaskContent(st.content, st.completed)
-    ));
-    this.isArchived = $state(isArchived);
-    this.isTrashed = $state(isTrashed);
-  }
+	constructor(name, subtasks = [], isArchived = false, isTrashed = false) {
+		this.name = $state(name);
+		this.subtasks = $state(subtasks.map(
+			st => new SubtaskContent(st.content, st.completed)
+		));
+		this.isArchived = $state(isArchived);
+		this.isTrashed = $state(isTrashed);
+	}
 
-  get completionPercentage() {
-    const total = this.subtasks.length;
-    const done = this.subtasks.filter(s => s.completed).length;
-    return total === 0 ? 0 : Math.round((done / total) * 100);
-  }
+	toJSON() {
+		return {
+			name: this.name,
+			subtasks: this.subtasks.map((s) => s.toJSON()),
+			isArchived: this.isArchived,
+			isTrashed: this.isTrashed
+		};
+	}
 }

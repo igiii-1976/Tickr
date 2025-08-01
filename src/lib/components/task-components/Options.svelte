@@ -1,85 +1,8 @@
 <script>
-    import { taskList, archiveList, trashList } from "$lib/input.svelte.js";
+    import { trashTask, archiveTask, restoreTask, deleteTask } from "$lib/helper.js";
 
     let { task = $bindable() , showEdit = $bindable(), showOption = $bindable(), isEditHovered = $bindable() } = $props();
-
     let { isArchiveHovered, isTrashHovered, isSaveHovered, isRestoreHovered, isDeleteHovered } = $state(false);
-
-    function trashTask(task) {
-        if (task.isArchived) {
-            const index = archiveList.indexOf(task);
-            if (index !== -1) {
-                task.isTrashed = true;
-                trashList.push(task);
-                setTimeout(() => {
-                    archiveList.splice(index, 1);
-                }, 500);
-            }
-        }
-        else {
-            const index = taskList.indexOf(task);
-            if (index !== -1) {
-                task.isTrashed = true;
-                trashList.push(task);
-                setTimeout(() => {
-                    taskList.splice(index, 1);
-                }, 500);
-            }
-        }        
-    }
-
-    function archiveTask(task) {
-        if (task.isTrashed) {
-            const index = trashList.indexOf(task);
-            if (index !== -1) {
-                task.isArchived = true;
-                archiveList.push(task);
-                setTimeout(() => {
-                    trashList.splice(index, 1);
-                }, 500);
-            }
-        }
-        else {
-            const index = taskList.indexOf(task);
-            if (index !== -1) {
-                task.isArchived = true;
-                archiveList.push(task);
-                setTimeout(() => {
-                    taskList.splice(index, 1);
-                }, 500);
-            }
-            }
-        }
-    
-    function restoreTask(task) {
-        if (task.isArchived) {
-            const index = archiveList.indexOf(task);
-                if (index !== -1) {
-                    taskList.push(task);
-                    setTimeout(() => {
-                        archiveList.splice(index, 1);
-                    }, 500);
-                }
-        }
-        else if (task.isTrashed) {
-            const index = trashList.indexOf(task);
-                if (index !== -1) {
-                    taskList.push(task);
-                    setTimeout(() => {
-                        trashList.splice(index, 1);
-                    }, 500);
-                }
-        }
-    }
-
-    function deleteTask(task) {
-        const index = trashList.indexOf(task);
-            if (index !== -1) {
-                trashList.splice(index, 1);
-            }
-    }
-    
-
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -92,6 +15,7 @@
                 onmouseenter={() => isDeleteHovered = true} 
                 onmouseleave={() => isDeleteHovered = false}
                 onclick={() => {deleteTask(task); showOption = false;}}
+                title="Permanently delete"
             >
                 <img 
                     src={isDeleteHovered ? "delete-red.png" : "delete.png"} 
@@ -104,6 +28,7 @@
                 onmouseenter={() => isEditHovered = true} 
                 onmouseleave={() => isEditHovered = false}
                 onclick={() => showEdit = true}
+                title="Edit"
             >    
                 <img src={isEditHovered ? "edit-yellow.png" : "edit.png"} class="editIcon" alt="Edit icon" />
             </div>
@@ -113,6 +38,7 @@
                 onmouseenter={() => isSaveHovered = true} 
                 onmouseleave={() => isSaveHovered = false}
                 onclick={() => showEdit = false}
+                title="Save"
             >    
                 <img src={isSaveHovered ? "save-green.png" : "save.png"} class="saveIcon" alt="Save icon" />
             </div>
@@ -127,9 +53,8 @@
                 onclick={() => { 
                     archiveTask(task);
                     showOption = false;
-                    // task.isArchived = true;
-                    task.isTrashed = false;
                 }}
+                title="Archive"
             >
                 <img 
                     src={isArchiveHovered ? "archive-blue.png" : "archive.png"} 
@@ -144,9 +69,8 @@
                 onclick={() => { 
                     restoreTask(task);
                     showOption = false;
-                    task.isArchived = false;
-                    task.isTrashed = false;
                 }}
+                title="Restore"
             >
                 <img 
                     src={isRestoreHovered ? "restore-blue.png" : "restore.png"} 
@@ -164,8 +88,8 @@
                 onclick={() => {
                     trashTask(task);
                     showOption = false;
-                    task.isArchived = false;
                 }}
+                title="Trash"
             >
                 <img 
                     src={isTrashHovered ? "trash-red.png" : "trash.png"} 
@@ -180,9 +104,8 @@
                 onclick={() => { 
                     restoreTask(task);
                     showOption = false;
-                    task.isArchived = false;
-                    task.isTrashed = false;
                 }}
+                title="Restore"
             >
                 <img 
                     src={isRestoreHovered ? "restore-blue.png" : "restore.png"} 
@@ -190,7 +113,6 @@
                     alt="Restore icon"/>
             </div>
         {/if}
-        
 </div>
 
 

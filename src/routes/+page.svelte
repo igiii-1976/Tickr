@@ -4,9 +4,39 @@
     import Tabs from '$lib/components/Tabs.svelte';
     import Placeholder from '$lib/components/Placeholder.svelte';
     import { taskList, archiveList, trashList } from '$lib/input.svelte.js';
+    import { TaskContent } from '$lib/input.svelte.js';
+    import { onMount } from 'svelte';
 
     let showAddNew = $state(false);
     let chosenTab = $state("Home");
+
+    onMount(() => {
+        const savedTasks = localStorage?.getItem("taskList");
+        const savedArchive = localStorage?.getItem("archiveList");
+        const savedTrash = localStorage?.getItem("trashList");
+
+        if (savedTasks) {
+            const parsed = JSON.parse(savedTasks);
+            taskList.length = 0; // clear current contents
+            taskList.push(...parsed.map(t =>
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed)
+            ));
+        }
+        if (savedArchive) {
+            const parsed = JSON.parse(savedArchive);
+            archiveList.length = 0; // clear current contents
+            archiveList.push(...parsed.map(t =>
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed)
+            ));
+        }
+        if (savedTrash) {
+            const parsed = JSON.parse(savedTrash);
+            trashList.length = 0; // clear current contents
+            trashList.push(...parsed.map(t =>
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed)
+            ));
+        }
+    });
 </script>
 
 <div class="layout">
@@ -46,7 +76,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* justify-content: center; */
         gap: 15px;
     }
     .topComponents {
