@@ -174,6 +174,9 @@
         transition: all 300ms ease;
 	    transform: scale(0.95);
     }
+    .settingsTab:hover, .historyTab:hover {
+        background-color: #243B7C;
+    }
     .settingsTab.active, .historyTab.active {
         opacity: 1;
         background-color: #3A7CE6;
