@@ -1,11 +1,12 @@
 <script>
-    import { taskList, archiveList, trashList } from '$lib/input.svelte.js';
+    import { taskList, archiveList, trashList, historyList } from '$lib/input.svelte.js';
 
     let { chosenTab } = $props();
 
     let lenTaskList = $derived(taskList.length);
     let lenArchiveList = $derived(archiveList.length);
     let lenTrashList = $derived(trashList.length);
+    let lenHistoryList = $derived(historyList.length);
 </script>
 
 {#if lenTaskList === 0 && chosenTab === "Home"}
@@ -14,8 +15,9 @@
     <div class="placeholder">Your archive is empty. Tasks you archive will show up here for safekeeping.</div>
 {:else if lenTrashList === 0 && chosenTab === "Trash"}
     <div class="placeholder">Nice and clean! No tasks in the trash — keep it that way or delete something 👀</div>
+{:else if lenHistoryList === 0 && chosenTab === "History"}
+    <div class="placeholder">Nothing in history… yet! Complete a task to see it here.</div>
 {/if}
-
 
 <style>
     .placeholder {

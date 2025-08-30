@@ -22,35 +22,42 @@
             <div class="header">
                 {#if chosenTab === "Settings"}
                     <img src="settings.png" alt="Settings icon" class="settingsIcon">
-                    <div class="headerText">Settings & Progress</div>
+                    <div class="headerText">Options & Settings</div>
+                {:else if chosenTab === "Progress"}
+                    <img src="progress-blue.png" alt="Progress icon" class="progressIcon">
+                    <div class="headerText">Progress & Analytics</div>
                 {:else}
-                    <img src="history.png" alt="History icon" class="historyIcon">
-                    <div class="headerText">History</div>
+                    <img src="archive-blue.png" alt="Archive icon" class="archiveIcon" style="width: 16px; height: 16px;">
+                    <div class="headerText">Archive</div>
                 {/if}
             </div>
 
             <div class="menuContents">
-            <!-- Settings / History tabs -->
+            <!-- Settings / Archive tabs -->
                 <div class="tabs">
                     <div class="settingsTab" class:active={chosenTab==="Settings"} onclick={() => chosenTab = "Settings"}>
                         <img src="settings-white.png" alt="Settings tab icon" class="settingsTabIcon">
                         <div class="settingsTabText">Settings</div>
                     </div>
-                    <div class="historyTab" class:active={chosenTab==="History"} onclick={() => chosenTab = "History"}>
-                        <img src="restore.png" alt="History tab icon" class="historyTabIcon">
-                        <div class="historyTabText">History</div>
+                    <div class="progressTab" class:active={chosenTab==="Progress"} onclick={() => chosenTab = "Progress"}>
+                        <img src="progress.png" alt="Progress tab icon" class="progressTabIcon">
+                        <div class="progressTabText">Progress</div>
+                    </div>
+                    <div class="archiveTab" class:active={chosenTab==="Archive"} onclick={() => chosenTab = "Archive"}>
+                        <img src="archive.png" alt="Archive tab icon" class="archiveTabIcon">
+                        <div class="archiveTabText">Archive</div>
                     </div>
                 </div>
 
                 <hr class="solid" style="border-top: 1px solid #bbb; width: 100%; opacity: 0.1">
 
-                <Settings/>
-                
-                <!-- insert Delete all -->
-
-                <!-- insert Daily progress -->
-
-                <!-- insert Weekly stats -->
+                {#if chosenTab === "Settings"}
+                    <Settings/>
+                {:else if chosenTab === "Progress"}
+                    <!-- insert Daily progress -->
+                {:else}
+                    <!-- insert Archive -->
+                {/if}
             </div>
         </div>
     </div>
@@ -111,7 +118,7 @@
         border-color: #334155;
         background-color: #1E293B;
         padding: 1em;
-        width: 25%;
+        width: 30%;
         height: 100%;
         gap: 5px;
         overflow: auto;
@@ -130,7 +137,7 @@
         justify-content: center;
         margin-top: 40px;
     }
-    .settingsIcon, .historyIcon {
+    .settingsIcon, .archiveIcon, .progressIcon {
         width: 17px;
         height: 17px;
     }
@@ -146,7 +153,7 @@
         flex-direction: column;
         gap: 10px;
     }
-    /* Settings & History tabs */
+    /* Settings & Archive tabs */
     .tabs {
         position: relative;
         /* width: 95%; */
@@ -160,7 +167,7 @@
         align-items: center;
         justify-content: center;
     }
-    .settingsTab, .historyTab {
+    .settingsTab, .archiveTab, .progressTab {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -174,19 +181,19 @@
         transition: all 300ms ease;
 	    transform: scale(0.95);
     }
-    .settingsTab:hover, .historyTab:hover {
+    .settingsTab:hover, .archiveTab:hover, .progressTab:hover {
         background-color: #243B7C;
     }
-    .settingsTab.active, .historyTab.active {
+    .settingsTab.active, .archiveTab.active, .progressTab.active {
         opacity: 1;
         background-color: #3A7CE6;
         transform: scale(1);
     }
-    .settingsTabIcon, .historyTabIcon {
+    .settingsTabIcon, .archiveTabIcon, .progressTabIcon {
         width: 12px;
         height: 12px;
     }
-    .settingsTabText, .historyTabText {
+    .settingsTabText, .archiveTabText, .progressTabText {
         font-size: 10px;
         margin-left: 5px;
         margin-top: 2px;

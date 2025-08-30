@@ -9,6 +9,13 @@
 
     function toggleCompletion() {
         subtask.completed = !subtask.completed;
+        // Set or clear completion date
+        if (subtask.completed) {
+            subtask.completedAt = new Date();
+        } else {
+            subtask.completedAt = null;
+        }
+        // Save to localStorage
         localStorage.setItem("taskList", JSON.stringify(taskList));
     }
 

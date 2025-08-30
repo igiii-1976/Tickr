@@ -1,11 +1,12 @@
 <script>
-    import { taskList, archiveList, trashList } from "$lib/input.svelte.js";
+    import { taskList, archiveList, trashList, historyList } from "$lib/input.svelte.js";
 
     let { chosenTab = $bindable() } = $props();
 
     let lenTaskList = $derived(taskList.length);
     let lenArchiveList = $derived(archiveList.length);
     let lenTrashList = $derived(trashList.length);
+    let lenHistoryList = $derived(historyList.length);
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -17,10 +18,10 @@
                 <div class = "homeLength">{lenTaskList}</div>
         </div>
 
-        <div class = "archiveContainer" class:active={chosenTab==="Archive"} onclick={() => chosenTab = "Archive"}>
-                <img src="archive.png" class = "archiveIcon" alt="Archive Icon">
-                <div class = "archiveText">Archive</div>
-                <div class = "archiveLength">{lenArchiveList}</div>
+        <div class = "historyContainer" class:active={chosenTab==="History"} onclick={() => chosenTab = "History"}>
+                <img src="history.png" class = "historyIcon" alt="History Icon">
+                <div class = "historyText">History</div>
+                <div class = "historyLength">{lenHistoryList}</div>
         </div>
 
         <div class = "trashContainer" class:active={chosenTab==="Trash"} onclick={() => chosenTab = "Trash"}>
@@ -46,7 +47,7 @@
         align-items: center;
         gap: 0.4em;
     }
-    .homeContainer, .archiveContainer, .trashContainer {
+    .homeContainer, .historyContainer, .trashContainer {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -58,7 +59,7 @@
         transition: all 300ms ease;
 	    transform: scale(1);
     }
-    .homeContainer.active, .archiveContainer.active, .trashContainer.active{
+    .homeContainer.active, .historyContainer.active, .trashContainer.active{
         border: solid 0.3px;
         border-color: #334155;
         border-radius: 25px;
@@ -66,19 +67,19 @@
         opacity: 1;
         transform: scale(1.05);
     }
-    .homeIcon, .archiveIcon, .trashIcon{
+    .homeIcon, .historyIcon, .trashIcon{
         position: relative;
         top: 2.5px;
         width: 12px;
         height: 12px;
     }
-    .homeText, .archiveText, .trashText{
+    .homeText, .historyText, .trashText{
         position: relative;
         top: 1.75px;
         color: #E2E8F0;
         font-size: 0.70em;
     }
-    .homeLength, .archiveLength, .trashLength{
+    .homeLength, .historyLength, .trashLength{
         font-size: 0.60em;
         padding: 3px;
         width: 1.5em;

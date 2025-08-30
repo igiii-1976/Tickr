@@ -1,6 +1,6 @@
 <script>
     let darkMode = $state(true);
-    let autoHistory = $state(false);
+    let autoHistory = $state(true);
     let dateAsName = $state(false);
     
     let showDeleteConfirm = $state(false);
@@ -32,7 +32,7 @@
         <!-- Auto move to history -->
         <div class="autoHistory">
             <div class="autoHistoryTitle">
-                <img src="restore.png" alt="Auto history icon" class="autoHistoryIcon">
+                <img src="history.png" alt="Auto history icon" class="autoHistoryIcon">
                 <div class="avgText">Auto Move to History</div>
                 <div class="autoHistoryToggle" class:active={autoHistory} onclick={() => autoHistory = !autoHistory}>
                     <div class="slider"></div>

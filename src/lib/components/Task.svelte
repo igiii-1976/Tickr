@@ -10,6 +10,12 @@
     let { task = $bindable() } = $props();
     let { isHovered, showOption, showEdit, isEditHovered } = $state(false);
 
+    let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
+    let totalSubtasks = $derived(task.subtasks.length);
+    let progressPercent = $derived.by(() => {
+        return totalSubtasks !== 0 ? Math.round((completedSubtask / totalSubtasks) * 100) : 0}
+    );
+
     // Functions for Task component
     function addSubtask(subtask) {
         const newSubtask = new SubtaskContent(subtask);
@@ -24,19 +30,21 @@
         }
         localStorage.setItem("taskList", JSON.stringify(taskList));
     }
-    // Functions for Task component
 
-    let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
-    let totalSubtasks = $derived(task.subtasks.length);
-    let progressPercent = $derived.by(() => {
-        return totalSubtasks !== 0 ? Math.round((completedSubtask / totalSubtasks) * 100) : 0}
-    );
+    function setTaskCompletionDate() {
+        if (progressPercent === 100) {
+            task.completedAt = new Date();
+        } else {
+            task.completedAt = null;
+        }
+        localStorage.setItem("taskList", JSON.stringify(taskList));
+    }
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore event_directive_deprecated -->
-<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isAtBottom={isAtBottom(task, taskList)}>
+<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory} class:isAtBottom={isAtBottom(task, taskList)}>
     <div class="taskDetails">
         <div class="titleRow">
             <!-- Task Name -->
@@ -89,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="subtaskDetails" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
+        <div class="subtaskDetails" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
             {#each task.subtasks as subtask}
                 <Subtask
                     subtaskList={task.subtasks} 
@@ -97,7 +105,7 @@
                 />
             {/each}
         </div>
-        <div class="addSubtask" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived}>
+        <div class="addSubtask" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
             <AddSubtask
                 add={addSubtask}
                 task = {task}
@@ -123,7 +131,7 @@
         opacity: 0.6;
         transition: opacity 500ms ease, transform 500ms ease;
     }
-    .taskContainer.isArchived {
+    .taskContainer.isArchived, .taskContainer.isHistory {
         opacity: 0.8;
         transition: opacity 500ms ease, transform 500ms ease;
     }
@@ -159,8 +167,8 @@
     }
     .optionContainer{
         position: relative;
-        bottom: 12px;
-        right: 110px;
+        bottom: 13.5px;
+        right: 135px;
     }
     .optionIconContainer {
         padding: 0.3em;
@@ -217,7 +225,7 @@
         gap: 0.5em;
         margin-top: 0.2em;
     }
-    .subtaskDetails.isTrashed, .subtaskDetails.isArchived, .addSubtask.isTrashed, .addSubtask.isArchived  {
+    .subtaskDetails.isTrashed, .subtaskDetails.isArchived, .subtaskDetails.isHistory, .addSubtask.isTrashed, .addSubtask.isArchived, .addSubtask.isHistory {
         pointer-events: none;
     }
 </style>

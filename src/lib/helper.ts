@@ -1,4 +1,4 @@
-import { taskList, archiveList, trashList } from "$lib/input.svelte.js";
+import { taskList, archiveList, trashList, historyList } from "$lib/input.svelte.js";
 
 // Functions for Task.svelte
 export function getProgressColor(progressPercent) {
@@ -57,6 +57,7 @@ export function trashTask(task) {
         if (index !== -1) {
             task.isTrashed = true;
             task.isArchived = false;
+            task.isHistory = false;
             trashList.push(task);
             localStorage.setItem("trashList", JSON.stringify(trashList)); 
             setTimeout(() => {
@@ -64,11 +65,25 @@ export function trashTask(task) {
                 localStorage.setItem("archiveList", JSON.stringify(archiveList));
             }, 500);
         }
+    } else if (task.isHistory) {
+        const index = historyList.indexOf(task);
+        if (index !== -1) {
+            task.isTrashed = true;
+            task.isArchived = false;
+            task.isHistory = false;
+            trashList.push(task);
+            localStorage.setItem("trashList", JSON.stringify(trashList)); 
+            setTimeout(() => {
+                historyList.splice(index, 1);
+                localStorage.setItem("historyList", JSON.stringify(historyList));
+            }, 500);
+        }
     } else {
         const index = taskList.indexOf(task);
         if (index !== -1) {
             task.isTrashed = true;
             task.isArchived = false;
+            task.isHistory = false;
             trashList.push(task);
             localStorage.setItem("trashList", JSON.stringify(trashList)); 
             setTimeout(() => {
@@ -85,6 +100,7 @@ export function archiveTask(task) {
         if (index !== -1) {
             task.isArchived = true;
             task.isTrashed = false;
+            task.isHistory = false;
             archiveList.push(task);
             localStorage.setItem("archiveList", JSON.stringify(archiveList));
             setTimeout(() => {
@@ -92,11 +108,25 @@ export function archiveTask(task) {
                 localStorage.setItem("trashList", JSON.stringify(trashList));   
             }, 500);
         }
+    } else if (task.isHistory) {
+        const index = historyList.indexOf(task);
+        if (index !== -1) {
+            task.isArchived = true;
+            task.isTrashed = false;
+            task.isHistory = false;
+            archiveList.push(task);
+            localStorage.setItem("archiveList", JSON.stringify(archiveList));
+            setTimeout(() => {
+                historyList.splice(index, 1);
+                localStorage.setItem("historyList", JSON.stringify(historyList));   
+            }, 500);
+        }
     } else {
         const index = taskList.indexOf(task);
         if (index !== -1) {
             task.isArchived = true;
             task.isTrashed = false;
+            task.isHistory = false;
             archiveList.push(task);
             localStorage.setItem("archiveList", JSON.stringify(archiveList));
             setTimeout(() => {
@@ -113,6 +143,7 @@ export function restoreTask(task) {
         if (index !== -1) {
             task.isArchived = false;
             task.isTrashed = false;
+            task.isHistory = false;
             taskList.push(task);
             localStorage.setItem("taskList", JSON.stringify(taskList));
             setTimeout(() => {
@@ -125,6 +156,7 @@ export function restoreTask(task) {
         if (index !== -1) {
             task.isArchived = false;
             task.isTrashed = false;
+            task.isHistory = false;
             taskList.push(task);
             localStorage.setItem("taskList", JSON.stringify(taskList));
             setTimeout(() => {
@@ -132,7 +164,63 @@ export function restoreTask(task) {
                 localStorage.setItem("trashList", JSON.stringify(trashList)); 
             }, 500);
         }
-    } 
+    } else {
+        const index = historyList.indexOf(task);
+        if (index !== -1) {
+            task.isArchived = false;
+            task.isTrashed = false;
+            task.isHistory = false;
+            taskList.push(task);
+            localStorage.setItem("taskList", JSON.stringify(taskList));
+            setTimeout(() => {
+                historyList.splice(index, 1);
+                localStorage.setItem("historyList", JSON.stringify(historyList)); 
+            }, 500);
+        }
+    }
+}
+
+export function moveToHistory(task) {
+    if (task.isTrashed) {
+        const index = trashList.indexOf(task);
+        if (index !== -1) {
+            task.isHistory = true;
+            task.isTrashed = false;
+            task.isArchived = false;
+            historyList.push(task);
+            localStorage.setItem("historyList", JSON.stringify(historyList));
+            setTimeout(() => {
+                trashList.splice(index, 1);
+                localStorage.setItem("trashList", JSON.stringify(trashList));   
+            }, 500);
+        }
+    } else if (task.isArchived) {
+        const index = archiveList.indexOf(task);
+        if (index !== -1) {
+            task.isHistory = true;
+            task.isTrashed = false;
+            task.isArchived = false;
+            historyList.push(task);
+            localStorage.setItem("historyList", JSON.stringify(historyList));
+            setTimeout(() => {
+                archiveList.splice(index, 1);
+                localStorage.setItem("archiveList", JSON.stringify(archiveList));   
+            }, 500);
+        }
+    } else {
+        const index = taskList.indexOf(task);
+        if (index !== -1) {
+            task.isHistory = true;
+            task.isTrashed = false;
+            task.isArchived = false;
+            historyList.push(task);
+            localStorage.setItem("historyList", JSON.stringify(historyList));
+            setTimeout(() => {
+                taskList.splice(index, 1);
+                localStorage.setItem("taskList", JSON.stringify(taskList));
+            }, 500);
+        }
+    }
 }
 
 export function deleteTask(task) {
