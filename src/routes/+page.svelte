@@ -20,21 +20,21 @@
             const parsed = JSON.parse(savedTasks);
             taskList.length = 0; // clear current contents
             taskList.push(...parsed.map(t =>
-                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt)
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt, t.isExpanded)
             ));
         }
         if (savedArchive) {
             const parsed = JSON.parse(savedArchive);
             archiveList.length = 0; // clear current contents
             archiveList.push(...parsed.map(t =>
-                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt)
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt, t.isExpanded)
             ));
         }
         if (savedTrash) {
             const parsed = JSON.parse(savedTrash);
             trashList.length = 0; // clear current contents
             trashList.push(...parsed.map(t =>
-                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt)
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt, t.isExpanded)
             ));
         }
 
@@ -42,7 +42,7 @@
             const parsed = JSON.parse(savedHistory);
             historyList.length = 0; // clear current contents
             historyList.push(...parsed.map(t =>
-                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt)
+                new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt, t.isExpanded)
             ));
         }
     });

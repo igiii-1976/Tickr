@@ -22,7 +22,7 @@ export class SubtaskContent {
 }
 
 export class TaskContent {
-	constructor(name, subtasks = [], isArchived = false, isTrashed = false, isHistory = false, createdAt = new Date(), completedAt = null) {
+	constructor(name, subtasks = [], isArchived = false, isTrashed = false, isHistory = false, createdAt = new Date(), completedAt = null, isExpanded = true) {
 		this.name = $state(name);
 		this.subtasks = $state(subtasks.map(
 			st => new SubtaskContent(st.content, st.completed, st.createdAt, st.completedAt)
@@ -32,6 +32,7 @@ export class TaskContent {
 		this.isHistory = $state(isHistory);
 		this.createdAt = $state(createdAt);
 		this.completedAt = $state(completedAt);
+		this.isExpanded = $state(isExpanded);
 	}
 
 	toJSON() {
@@ -42,7 +43,8 @@ export class TaskContent {
 			isTrashed: this.isTrashed,
 			isHistory: this.isHistory,
 			createdAt: this.createdAt,
-			completedAt: this.completedAt
+			completedAt: this.completedAt,
+			isExpanded: this.isExpanded
 		};
 	}
 }

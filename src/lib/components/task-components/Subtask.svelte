@@ -2,7 +2,7 @@
     import { taskList } from "$lib/input.svelte.js";
     import { removeSubtask } from "$lib/helper.js";
 
-    let { subtaskList = $bindable(), subtask = $bindable() } = $props();    
+    let { task = $bindable(), subtaskList = $bindable(), subtask = $bindable() } = $props();    
     let { isTrashHovered, isEditHovered, isSaveHovered, showEdit } = $state(false);
 
     let completed = $derived(subtask.completed);
@@ -15,6 +15,15 @@
         } else {
             subtask.completedAt = null;
         }
+
+        // Update task completion status
+        let allCompleted = subtaskList.every(st => st.completed);
+        if (allCompleted) {
+            task.completedAt = new Date();
+        } else {
+            task.completedAt = null;
+        }
+
         // Save to localStorage
         localStorage.setItem("taskList", JSON.stringify(taskList));
     }

@@ -4,11 +4,11 @@
     import Options from "./task-components/Options.svelte";
     import { SubtaskContent } from "$lib/input.svelte.js";
     import { fly } from 'svelte/transition';
-    import { taskList } from "$lib/input.svelte.js";
+    import { taskList, historyList, archiveList, trashList } from "$lib/input.svelte.js";
     import { getProgressColor, isAtBottom } from "$lib/helper.js";
 
     let { task = $bindable() } = $props();
-    let { isHovered, showOption, showEdit, isEditHovered } = $state(false);
+    let { isOptionHovered, isExpandHovered, showOption, showEdit, isEditHovered } = $state(false);
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
@@ -39,6 +39,18 @@
         }
         localStorage.setItem("taskList", JSON.stringify(taskList));
     }
+
+    function updateExpansionState() {
+        if (task.isHistory) {
+            localStorage.setItem("historyList", JSON.stringify(historyList));
+        } else if (task.isArchived) {
+            localStorage.setItem("archiveList", JSON.stringify(archiveList));
+        } else if (task.isTrashed) {
+            localStorage.setItem("trashList", JSON.stringify(trashList));
+        } else {
+            localStorage.setItem("taskList", JSON.stringify(taskList));
+        }
+    }
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -68,14 +80,31 @@
 
             <div 
                 class="optionIconContainer"
-                on:mouseenter={() => isHovered = true}
-                on:mouseleave={() => isHovered = false}
+                on:mouseenter={() => isOptionHovered = true}
+                on:mouseleave={() => isOptionHovered = false}
                 on:click={() => showOption = !showOption}
             >
                 <img 
-                    src={isHovered ? "option-white.png" : showOption ? "option-selected.png" : "option.png"}
+                    src={isOptionHovered ? "option-white.png" : showOption ? "option-selected.png" : "option.png"}
                     class="optionIcon" 
                     alt="Option icon"
+                />
+            </div>
+            
+            <div 
+                class="expandIconContainer"
+                on:mouseenter={() => isExpandHovered = true}
+                on:mouseleave={() => isExpandHovered = false}
+                on:click={() => {
+                    task.isExpanded = !task.isExpanded;
+                    updateExpansionState();
+                }}
+                style="margin-left: 3px;"
+            >
+                <img 
+                    src={task.isExpanded ? "expand.png" : "collapse.png"} 
+                    class="expandIcon" 
+                    alt="Expand icon"
                 />
             </div>
         </div>
@@ -97,20 +126,23 @@
                 </div>
             </div>
         </div>
-        <div class="subtaskDetails" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
-            {#each task.subtasks as subtask}
-                <Subtask
-                    subtaskList={task.subtasks} 
-                    subtask={subtask}
+        {#if task.isExpanded}
+            <div class="subtaskDetails" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
+                {#each task.subtasks as subtask}
+                    <Subtask
+                        task={task}
+                        subtaskList={task.subtasks} 
+                        subtask={subtask}
+                    />
+                {/each}
+            </div>
+        {/if}
+            <div class="addSubtask" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
+                <AddSubtask
+                    add={addSubtask}
+                    task = {task}
                 />
-            {/each}
-        </div>
-        <div class="addSubtask" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory}>
-            <AddSubtask
-                add={addSubtask}
-                task = {task}
-            />
-        </div>
+            </div>
     </div>
 </div>
 
@@ -170,17 +202,17 @@
         bottom: 13.5px;
         right: 135px;
     }
-    .optionIconContainer {
+    .optionIconContainer, .expandIconContainer {
         padding: 0.3em;
-        border-radius: 50px;
+        border-radius: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    .optionIconContainer:hover {
+    .optionIconContainer:hover, .expandIconContainer:hover {
         background-color: #1C3373;
     }
-    .optionIcon {
+    .optionIcon, .expandIcon {
         width: 15px;
         height: 15px;
     }
