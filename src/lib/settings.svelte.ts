@@ -5,5 +5,5 @@ export let autoHistory = $state({
     value: false,
 });
 export let dateAsName = $state({
-    value: false,
+    value: true,
 });

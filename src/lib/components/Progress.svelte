@@ -2,10 +2,11 @@
     import AddNew from "./task-components/AddNew.svelte";
     import { TaskContent, taskList } from '$lib/input.svelte.js';
     import { slide } from 'svelte/transition';
-    import { getProgressColor, getIconColor, computeProgress, computeTotalSubtasks } from "$lib/helper.js";
+    import { getProgressColor, getIconColor, computeProgress, computeTotalSubtasks, emptyTrash } from "$lib/helper.js";
     
     let { showAddNew, chosenTab } = $props();
     let addisHovered = $state(false);
+    let showEmptyPopup = $state(false);
 
     let taskCount = $derived(computeTotalSubtasks());
     let completedTasks = $derived(computeProgress());
@@ -28,17 +29,34 @@
         <div class="titleRow"> 
             <img src={getIconColor(progressPercent, taskCount)} class="checkIcon" alt="Checkmark icon"/>
             <div class="titleText">Overall Progress</div>
-             <div class="addIconTemplate">
-                <div 
-                    class="addIconContainer" class:disableAdd={chosenTab !== "Home"}
-                    onmouseenter={() => addisHovered = true}
-                    onmouseleave={() => addisHovered = false}
-                    onclick={() => showAddNew = true}
-                >
-                    <img src={addisHovered ? "square-plus-green.png" : "square-plus-white.png"} 
-                    class="addIcon" 
-                    alt="Add icon"/>
-                </div>
+             <div class="addIconTemplate" title="{chosenTab === 'Trash' ? 'Empty Trash' : 'Add New Task'}">
+                {#if chosenTab === "Trash"}
+                    <div 
+                        class="addIconContainer"
+                        onmouseenter={() => addisHovered = true}
+                        onmouseleave={() => addisHovered = false}
+                        onclick={emptyTrash}
+                    >
+                    <img 
+                        src={addisHovered ? "delete-red.png" : "delete.png"} 
+                        class="addIcon" 
+                        alt="Add icon"
+                    />
+                    </div>
+                {:else}
+                    <div 
+                        class="addIconContainer" class:disableAdd={chosenTab !== "Home"}
+                        onmouseenter={() => addisHovered = true}
+                        onmouseleave={() => addisHovered = false}
+                        onclick={() => showAddNew = true}
+                    >
+                    <img 
+                        src={addisHovered ? "square-plus-green.png" : "square-plus-white.png"} 
+                        class="addIcon" 
+                        alt="Add icon"
+                    />
+                    </div>
+                {/if}
              </div>
         </div>
         <div class="progressDetails">

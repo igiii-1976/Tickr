@@ -9,6 +9,8 @@
 
     let { task = $bindable() } = $props();
     let { isOptionHovered, isExpandHovered, showOption, showEdit, isEditHovered } = $state(false);
+    let title = $derived((task.createdAt ? `Created at: ${new Date(task.createdAt).toLocaleString()}` : "No creation date") + "\n" +
+        (task.completedAt ? `Completed at: ${new Date(task.completedAt).toLocaleString()}` : ""));
 
     let completedSubtask = $derived(task.subtasks.filter(subtask => subtask.completed).length);
     let totalSubtasks = $derived(task.subtasks.length);
@@ -56,7 +58,13 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore event_directive_deprecated -->
-<div class="taskContainer" class:isTrashed={task.isTrashed} class:isArchived={task.isArchived} class:isHistory={task.isHistory} class:isAtBottom={isAtBottom(task, taskList)}>
+<div 
+    class="taskContainer" 
+    class:isTrashed={task.isTrashed} 
+    class:isArchived={task.isArchived} 
+    class:isHistory={task.isHistory} 
+    class:isAtBottom={isAtBottom(task, taskList)}
+>
     <div class="taskDetails">
         <div class="titleRow">
             <!-- Task Name -->
@@ -108,7 +116,7 @@
                 />
             </div>
         </div>
-        <div class="progressDetails">
+        <div class="progressDetails" title={title}>
             <div class="percentRow"> 
                 <div class="progressText">
                     {completedSubtask} of {totalSubtasks} tasks completed

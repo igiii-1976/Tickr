@@ -231,6 +231,11 @@ export function deleteTask(task) {
     }
 }
 
+export function emptyTrash() {
+    trashList.length = 0;
+    localStorage.setItem("trashList", JSON.stringify(trashList)); 
+}
+
 
 // Functions for Subtask.svelte
 export function removeSubtask(subtask, subtaskList) {
