@@ -1,6 +1,9 @@
 <script>
+    import { dateAsName } from "$lib/settings.svelte.js";
+    
+    let newTaskName = dateAsName.value ? "To do: " + new Date().toLocaleDateString("en-US", {year: "numeric", month: "long", day: "2-digit"}) : "";
     let { add, close } = $props();
-    let newTask = $state("");
+    let newTask = $state(newTaskName);
 
     function addTask(event) {
         if (event.key === 'Enter' && newTask !== "") {

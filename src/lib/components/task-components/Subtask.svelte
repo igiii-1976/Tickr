@@ -1,6 +1,7 @@
 <script>
     import { taskList } from "$lib/input.svelte.js";
-    import { removeSubtask } from "$lib/helper.js";
+    import { removeSubtask, moveToHistory } from "$lib/helper.js";
+    import { autoHistory } from "$lib/settings.svelte.js";
 
     let { task = $bindable(), subtaskList = $bindable(), subtask = $bindable() } = $props();    
     let { isTrashHovered, isEditHovered, isSaveHovered, showEdit } = $state(false);
@@ -20,6 +21,9 @@
         let allCompleted = subtaskList.every(st => st.completed);
         if (allCompleted) {
             task.completedAt = new Date();
+            if (autoHistory.value) {
+                moveToHistory(task);
+            }
         } else {
             task.completedAt = null;
         }

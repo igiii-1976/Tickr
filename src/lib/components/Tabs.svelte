@@ -1,10 +1,9 @@
 <script>
-    import { taskList, archiveList, trashList, historyList } from "$lib/input.svelte.js";
+    import { taskList, trashList, historyList } from "$lib/input.svelte.js";
 
     let { chosenTab = $bindable() } = $props();
 
     let lenTaskList = $derived(taskList.length);
-    let lenArchiveList = $derived(archiveList.length);
     let lenTrashList = $derived(trashList.length);
     let lenHistoryList = $derived(historyList.length);
 </script>

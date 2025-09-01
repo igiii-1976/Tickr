@@ -1,7 +1,5 @@
 <script>
-    let darkMode = $state(true);
-    let autoHistory = $state(true);
-    let dateAsName = $state(false);
+    import { darkMode, autoHistory, dateAsName } from "$lib/settings.svelte.js";
     
     let showDeleteConfirm = $state(false);
 </script>
@@ -20,7 +18,13 @@
             <div class="darkModeTitle">
                 <img src="moon.png" alt="Dark mode icon" class="darkModeIcon">
                 <div class="avgText">Dark Mode</div>
-                <div class="darkModeToggle" class:active={darkMode} onclick={() => darkMode = !darkMode}>
+                <div 
+                    class="darkModeToggle" 
+                    class:active={darkMode.value} 
+                    onclick={() => {
+                        darkMode.value = !darkMode.value;
+                        localStorage.setItem("darkMode", JSON.stringify(darkMode));
+                    }}>
                     <div class="slider"></div>
                 </div>
             </div>
@@ -34,7 +38,13 @@
             <div class="autoHistoryTitle">
                 <img src="history.png" alt="Auto history icon" class="autoHistoryIcon">
                 <div class="avgText">Auto Move to History</div>
-                <div class="autoHistoryToggle" class:active={autoHistory} onclick={() => autoHistory = !autoHistory}>
+                <div 
+                    class="autoHistoryToggle" 
+                    class:active={autoHistory.value} 
+                    onclick={() => {
+                        autoHistory.value = !autoHistory.value;
+                        localStorage.setItem("autoHistory", JSON.stringify(autoHistory));
+                    }}>
                     <div class="slider"></div>
                 </div>
             </div>
@@ -48,7 +58,13 @@
             <div class="dateAsNameTitle">
                 <img src="calendar.png" alt="Date as name icon" class="dateAsNameIcon">
                 <div class="avgText">Date as Default Name</div>
-                <div class="dateAsNameToggle" class:active={dateAsName} onclick={() => dateAsName = !dateAsName}>
+                <div 
+                    class="dateAsNameToggle" 
+                    class:active={dateAsName.value} 
+                    onclick={() => {
+                        dateAsName.value = !dateAsName.value;
+                        localStorage.setItem("dateAsName", JSON.stringify(dateAsName));
+                    }}>
                     <div class="slider"></div>
                 </div>
             </div>

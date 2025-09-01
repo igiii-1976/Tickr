@@ -58,7 +58,6 @@ export function trashTask(task) {
             task.isTrashed = true;
             task.isArchived = false;
             task.isHistory = false;
-            task.isExpanded = false;
             trashList.push(task);
             localStorage.setItem("trashList", JSON.stringify(trashList)); 
             setTimeout(() => {
@@ -72,7 +71,6 @@ export function trashTask(task) {
             task.isTrashed = true;
             task.isArchived = false;
             task.isHistory = false;
-            task.isExpanded = false;
             trashList.push(task);
             localStorage.setItem("trashList", JSON.stringify(trashList)); 
             setTimeout(() => {
@@ -86,7 +84,6 @@ export function trashTask(task) {
             task.isTrashed = true;
             task.isArchived = false;
             task.isHistory = false;
-            task.isExpanded = false;
             trashList.push(task);
             localStorage.setItem("trashList", JSON.stringify(trashList)); 
             setTimeout(() => {
@@ -104,7 +101,6 @@ export function archiveTask(task) {
             task.isArchived = true;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = false;
             archiveList.push(task);
             localStorage.setItem("archiveList", JSON.stringify(archiveList));
             setTimeout(() => {
@@ -118,7 +114,6 @@ export function archiveTask(task) {
             task.isArchived = true;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = false;
             archiveList.push(task);
             localStorage.setItem("archiveList", JSON.stringify(archiveList));
             setTimeout(() => {
@@ -132,7 +127,6 @@ export function archiveTask(task) {
             task.isArchived = true;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = false;
             archiveList.push(task);
             localStorage.setItem("archiveList", JSON.stringify(archiveList));
             setTimeout(() => {
@@ -150,7 +144,6 @@ export function restoreTask(task) {
             task.isArchived = false;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = true;
             taskList.push(task);
             localStorage.setItem("taskList", JSON.stringify(taskList));
             setTimeout(() => {
@@ -164,7 +157,6 @@ export function restoreTask(task) {
             task.isArchived = false;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = true;
             taskList.push(task);
             localStorage.setItem("taskList", JSON.stringify(taskList));
             setTimeout(() => {
@@ -178,7 +170,6 @@ export function restoreTask(task) {
             task.isArchived = false;
             task.isTrashed = false;
             task.isHistory = false;
-            task.isExpanded = true;
             taskList.push(task);
             localStorage.setItem("taskList", JSON.stringify(taskList));
             setTimeout(() => {
@@ -196,7 +187,6 @@ export function moveToHistory(task) {
             task.isHistory = true;
             task.isTrashed = false;
             task.isArchived = false;
-            task.isExpanded = false;
             historyList.push(task);
             localStorage.setItem("historyList", JSON.stringify(historyList));
             setTimeout(() => {
@@ -210,7 +200,6 @@ export function moveToHistory(task) {
             task.isHistory = true;
             task.isTrashed = false;
             task.isArchived = false;
-            task.isExpanded = false;
             historyList.push(task);
             localStorage.setItem("historyList", JSON.stringify(historyList));
             setTimeout(() => {
@@ -224,7 +213,6 @@ export function moveToHistory(task) {
             task.isHistory = true;
             task.isTrashed = false;
             task.isArchived = false;
-            task.isExpanded = false;
             historyList.push(task);
             localStorage.setItem("historyList", JSON.stringify(historyList));
             setTimeout(() => {

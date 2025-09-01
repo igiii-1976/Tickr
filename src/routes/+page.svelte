@@ -45,6 +45,29 @@
                 new TaskContent(t.name, t.subtasks, t.isArchived, t.isTrashed, t.isHistory, t.createdAt, t.completedAt, t.isExpanded)
             ));
         }
+
+        // Settings
+        const savedDarkMode = localStorage?.getItem("darkMode");
+        const savedAutoHistory = localStorage?.getItem("autoHistory");
+        const savedDateAsName = localStorage?.getItem("dateAsName");
+        if (savedDarkMode) {
+            const parsed = JSON.parse(savedDarkMode);
+            import("$lib/settings.svelte.js").then(module => {
+                module.darkMode.value = parsed.value;
+            });
+        }
+        if (savedAutoHistory) {
+            const parsed = JSON.parse(savedAutoHistory);
+            import("$lib/settings.svelte.js").then(module => {
+                module.autoHistory.value = parsed.value;
+            });
+        }
+        if (savedDateAsName) {
+            const parsed = JSON.parse(savedDateAsName);
+            import("$lib/settings.svelte.js").then(module => {
+                module.dateAsName.value = parsed.value;
+            });
+        }
     });
 </script>
 
